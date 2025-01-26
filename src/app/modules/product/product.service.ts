@@ -1,6 +1,6 @@
+import mongoose from 'mongoose'
 import { Product } from './product.model'
 import { TProduct } from './product.interface'
-import mongoose from 'mongoose'
 
 const validateObjectId = (id: string): boolean => {
     return mongoose.Types.ObjectId.isValid(id)
