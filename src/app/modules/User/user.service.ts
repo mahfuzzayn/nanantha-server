@@ -1,7 +1,7 @@
 import AppError from '../../errors/AppError'
 import { TUser } from './user.interface'
-import { User } from './user.model'
 import httpStatus from 'http-status'
+import { User } from '../User/user.model'
 
 const registerUserIntoDB = async (payload: TUser) => {
     const userData: Partial<TUser> = { ...payload }
@@ -18,5 +18,5 @@ const registerUserIntoDB = async (payload: TUser) => {
 }
 
 export const UserServices = {
-    registerUserIntoDB,
+    registerUserIntoDB
 }

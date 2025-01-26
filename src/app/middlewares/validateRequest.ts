@@ -9,8 +9,6 @@ const validateRequest = (schema: AnyZodObject) => {
                 body: req.body,
             })
 
-            console.log(req);
-
             next()
         },
     )

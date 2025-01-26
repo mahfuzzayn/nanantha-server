@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { model, Schema } from 'mongoose'
-import { TUser } from './user.interface'
+import { TUser, UserModel } from './user.interface'
 import config from '../../config'
 import bcrypt from 'bcrypt'
+import { USER_ROLE } from './user.constant'
 
-const userSchema = new Schema<TUser>(
+const userSchema = new Schema<TUser, UserModel>(
     {
         name: {
             type: String,
@@ -21,6 +22,9 @@ const userSchema = new Schema<TUser>(
             required: true,
             select: 0,
         },
+        passwordChangedAt: {
+            type: Date,
+        },
         role: {
             type: String,
             enum: ['user', 'admin'],
@@ -31,6 +35,7 @@ const userSchema = new Schema<TUser>(
     },
 )
 
+// Hashing the password before saving
 userSchema.pre('save', async function (next) {
     const user = this
 
@@ -41,4 +46,32 @@ userSchema.pre('save', async function (next) {
     next()
 })
 
-export const User = model<TUser>('User', userSchema)
+// set '' after saving password
+userSchema.post('save', function (doc, next) {
+    doc.password = ''
+    next()
+})
+
+userSchema.statics.isUserExistsByEmail = async function (email: string) {
+    return await User.findOne({ email }).select('+password')
+}
+
+userSchema.statics.isPasswordMatched = async function (
+    plainTextPassword,
+    hashedPassword,
+) {
+    return await bcrypt.compare(plainTextPassword, hashedPassword)
+}
+
+userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
+    passwordChangedTimestamp: Date,
+    jwtIssuedTimestamp: number,
+) {
+    const passwordChangedTime =
+        new Date(passwordChangedTimestamp).getTime() / 1000
+    return passwordChangedTime > jwtIssuedTimestamp
+}
+
+export const User = model<TUser, UserModel>('User', userSchema)
+
+export type TUserRole = keyof typeof USER_ROLE
