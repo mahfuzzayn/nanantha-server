@@ -8,11 +8,16 @@ import bcrypt from 'bcrypt'
 import { JwtPayload } from 'jsonwebtoken'
 
 const loginUserFromDB = async (payload: TLoginUser) => {
-    // checking if the user is exist
     const user = await User.isUserExistsByEmail(payload.email)
 
     if (!user) {
-        throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !')
+        throw new AppError(httpStatus.NOT_FOUND, 'User not found!')
+    }
+
+    const isDeactivated = user?.isDeactivated
+
+    if (isDeactivated) {
+        throw new AppError(httpStatus.FORBIDDEN, 'User is deactivated!')
     }
 
     const jwtPayload = {
@@ -39,7 +44,13 @@ const changePasswordIntoDB = async (
     const user = await User.isUserExistsByEmail(userData.userEmail)
 
     if (!user) {
-        throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !')
+        throw new AppError(httpStatus.NOT_FOUND, 'User is not found !')
+    }
+
+    const isDeactivated = user?.isDeactivated
+
+    if (isDeactivated) {
+        throw new AppError(httpStatus.FORBIDDEN, 'This user is deactivated!')
     }
 
     // Checking if the password is correct

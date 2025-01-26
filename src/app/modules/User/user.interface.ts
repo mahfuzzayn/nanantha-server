@@ -6,6 +6,7 @@ export type TUser = {
     password: string
     passwordChangedAt?: Date
     role: 'user' | 'admin'
+    isDeactivated: boolean
 }
 
 export interface UserModel extends Model<TUser> {

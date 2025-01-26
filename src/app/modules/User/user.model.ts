@@ -29,6 +29,10 @@ const userSchema = new Schema<TUser, UserModel>(
             type: String,
             enum: ['user', 'admin'],
         },
+        isDeactivated: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         timestamps: true,
