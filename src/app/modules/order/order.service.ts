@@ -1,4 +1,4 @@
-import { ProductServices } from '../product/product.service'
+import { ProductServices } from '../Product/product.service'
 import { TOrder } from './order.interface'
 import { Order } from './order.model'
 

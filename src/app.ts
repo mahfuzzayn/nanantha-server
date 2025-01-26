@@ -1,18 +1,17 @@
 import express, { Application, Request, Response } from 'express'
 import cors from 'cors'
-import { ProductRoutes } from './app/modules/product/product.route'
-import { OrderRoutes } from './app/modules/order/order.route'
 import path from 'path'
 import fs from 'fs'
+import router from './app/routes'
+import globalErrorHandler from './app/middlewares/globalErrorHandler'
 const app: Application = express()
 
 // parser
 app.use(express.json())
-app.use(cors())
+app.use(cors({ origin: ['http://localhost:5173'], credentials: true }));
 
 // application routes
-app.use('/api/products', ProductRoutes)
-app.use('/api/orders', OrderRoutes)
+app.use('/api/v1', router)
 
 // homepage routes
 app.get('/', (req: Request, res: Response) => {
@@ -35,5 +34,7 @@ app.get('/', (req: Request, res: Response) => {
         res.status(200).json(jsonData)
     })
 })
+
+app.use(globalErrorHandler)
 
 export default app
