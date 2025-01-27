@@ -1,13 +1,27 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose from 'mongoose'
 import { Product } from './product.model'
 import { TProduct } from './product.interface'
+import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary'
 
 const validateObjectId = (id: string): boolean => {
     return mongoose.Types.ObjectId.isValid(id)
 }
 
-const createProductIntoDB = async (productData: TProduct) => {
-    const result = await Product.create(productData)
+const createProductIntoDB = async (file: any, payload: TProduct) => {
+    if (file) {
+        const imageName = `${payload.title}-${payload?.author}`
+        const path = file?.path
+        
+        // Ssend image to cloudinary
+        const { secure_url } = await sendImageToCloudinary(imageName, path)
+        payload.image = secure_url as string
+    }
+
+    console.log(payload);
+
+    const result = await Product.create(payload)
+    
     return result
 }
 

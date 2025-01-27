@@ -12,6 +12,15 @@ const registerUserValidationSchema = z.object({
     }),
 })
 
+const changeStatusValidationSchema = z.object({
+    body: z.object({
+        isDeactivated: z.boolean({
+            required_error: 'isDeactivated is required',
+        }),
+    }),
+})
+
 export const UserValidations = {
     registerUserValidationSchema,
+    changeStatusValidationSchema,
 }

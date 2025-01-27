@@ -52,6 +52,10 @@ const productSchema = new Schema<TProduct>(
                     '{VALUE} --- should only contain alphabetic characters',
             },
         },
+        image: {
+            type: String,
+            required: [true, 'Image is required'],
+        },
         description: {
             type: String,
             required: [true, 'Description of the Product (Book) is required'],

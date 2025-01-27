@@ -20,6 +20,9 @@ const loginUserFromDB = async (payload: TLoginUser) => {
         throw new AppError(httpStatus.FORBIDDEN, 'User is deactivated!')
     }
 
+    if (!(await User.isPasswordMatched(payload?.password, user?.password)))
+        throw new AppError(httpStatus.FORBIDDEN, 'User password is wrong')
+
     const jwtPayload = {
         userEmail: user.email,
         role: user.role,
