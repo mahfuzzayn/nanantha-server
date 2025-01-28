@@ -12,7 +12,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
         async (req: Request, res: Response, next: NextFunction) => {
             const token = req.headers.authorization
 
-            // checking if the token is missing
+            // Checking if the token is missing
             if (!token) {
                 throw new AppError(
                     httpStatus.UNAUTHORIZED,
@@ -22,7 +22,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
 
             let decoded
 
-            // checking if the given token is valid
+            // Checking if the given token is valid
             try {
                 decoded = jwt.verify(
                     token,
@@ -39,13 +39,24 @@ const auth = (...requiredRoles: TUserRole[]) => {
 
             const { role, userEmail, iat } = decoded
 
-            // checking if the user is exist
+            // Checking if the user is exist
             const user = await User.isUserExistsByEmail(userEmail)
 
             if (!user) {
                 throw new AppError(
                     httpStatus.NOT_FOUND,
-                    'This user is not found !',
+                    'This user is not found!',
+                )
+            }
+
+            // Checking if the user is already deleted
+
+            const isDeactivated = user?.isDeactivated
+
+            if (isDeactivated) {
+                throw new AppError(
+                    httpStatus.FORBIDDEN,
+                    'This user is deactivated!',
                 )
             }
 
@@ -58,14 +69,14 @@ const auth = (...requiredRoles: TUserRole[]) => {
             ) {
                 throw new AppError(
                     httpStatus.UNAUTHORIZED,
-                    'You are not authorized !',
+                    'You are not authorized!',
                 )
             }
 
             if (requiredRoles && !requiredRoles.includes(role)) {
                 throw new AppError(
                     httpStatus.UNAUTHORIZED,
-                    'You are not authorized  hi!',
+                    'You are not authorized!',
                 )
             }
 

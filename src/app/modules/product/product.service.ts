@@ -3,6 +3,8 @@ import mongoose from 'mongoose'
 import { Product } from './product.model'
 import { TProduct } from './product.interface'
 import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary'
+import QueryBuilder from '../../builder/QueryBuilder'
+import { productsSearchableFields } from './product.const'
 
 const validateObjectId = (id: string): boolean => {
     return mongoose.Types.ObjectId.isValid(id)
@@ -12,57 +14,31 @@ const createProductIntoDB = async (file: any, payload: TProduct) => {
     if (file) {
         const imageName = `${payload.title}-${payload?.author}`
         const path = file?.path
-        
+
         // Ssend image to cloudinary
         const { secure_url } = await sendImageToCloudinary(imageName, path)
         payload.image = secure_url as string
     }
 
-    console.log(payload);
-
     const result = await Product.create(payload)
-    
+
     return result
 }
 
-const getAllProductsFromDB = async (searchTerm: string) => {
-    if (!searchTerm) {
-        const result = await Product.find()
+const getAllProductsFromDB = async (query: Record<string, unknown>) => {
+    const productsQuery = new QueryBuilder(Product.find(), query)
+        .search(productsSearchableFields)
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
 
-        if (result.length === 0) {
-            throw new Error('No books were found')
-        }
+    const result = await productsQuery.modelQuery
+    const meta = await productsQuery.countTotal()
 
-        return result
-    } else {
-        const result = await Product.find({
-            $or: [
-                {
-                    title: {
-                        $regex: searchTerm,
-                        $options: 'i',
-                    },
-                },
-                {
-                    author: {
-                        $regex: searchTerm,
-                        $options: 'i',
-                    },
-                },
-                {
-                    category: {
-                        $regex: searchTerm,
-                        $options: 'i',
-                    },
-                },
-            ],
-        })
-
-        if (result.length === 0) {
-            throw new Error('No books were found with this search term')
-        }
-
-        return result
+    return {
+        meta,
+        result,
     }
 }
 
@@ -108,51 +84,22 @@ const getOrderProductFromDB = async (id: string) => {
 
 const updateProductFromDB = async (
     id: string,
-    updatedProduct: Partial<TProduct>,
+    file: any,
+    payload: Partial<TProduct>,
 ) => {
-    let isChangeValid: boolean = true
+    if (file) {
+        const imageName = `${payload.title}-${payload?.author}`
+        const path = file?.path
 
-    if (!validateObjectId(id)) {
-        const error = new Error('The provided ID is invalid')
-        error.name = 'InvalidID'
-        throw error
+        // Send new updated image to cloudinary
+        const { secure_url } = await sendImageToCloudinary(imageName, path)
+        payload.image = secure_url as string
     }
 
-    const product = await Product.findById(id)
-
-    if (!product) {
-        throw new Error('No book found with the provided ID.')
-    }
-
-    for (const key in updatedProduct) {
-        if (
-            updatedProduct[key as keyof Partial<TProduct>] ===
-            product[key as keyof TProduct]
-        ) {
-            isChangeValid = false
-        }
-    }
-
-    if (!isChangeValid) {
-        throw new Error('No updates detected, the book remains unchanged.')
-    }
-
-    const result = await Product.updateOne(
-        {
-            _id: id,
-        },
-        {
-            $set: updatedProduct,
-        },
-    )
-
-    if (!result.modifiedCount) {
-        const error = new Error(
-            'Failed to update the book. The provided ID does not match any existing book.',
-        )
-        error.name = 'SearchError'
-        throw error
-    }
+    const result = await Product.findByIdAndUpdate(id, payload, {
+        new: true,
+        runValidators: true,
+    })
 
     return result
 }

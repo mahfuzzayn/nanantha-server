@@ -1,135 +1,79 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from 'express'
 import { ProductServices } from './product.service'
+import sendResponse from '../../utils/sendResponse'
+import catchAsync from '../../utils/catchAsync'
+import httpStatus from 'http-status'
 
-const createProduct = async (req: Request, res: Response) => {
-    try {
-        const { product: productData } = req.body
+const createProduct = catchAsync(async (req, res) => {
+    const { product: productData } = req.body
 
-        const result = await ProductServices.createProductIntoDB(
-            req.file,
-            productData,
-        )
+    const result = await ProductServices.createProductIntoDB(
+        req.file,
+        productData,
+    )
 
-        res.status(200).json({
-            message: 'Book created successfully',
-            success: true,
-            data: result,
-        })
-    } catch (error: any) {
-        res.status(500).json({
-            message: error.message,
-            success: false,
-            error: {
-                name: error.name,
-                errors: error.errors,
-                stack: error.stack,
-            },
-        })
-    }
-}
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Book created successfully',
+        data: result,
+    })
+})
 
-const getAllProducts = async (req: Request, res: Response) => {
-    try {
-        const { searchTerm } = req.query
+const getAllProducts = catchAsync(async (req, res) => {
+    const result = await ProductServices.getAllProductsFromDB(req.query)
 
-        const result = await ProductServices.getAllProductsFromDB(
-            searchTerm as string,
-        )
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Books retrieved successfully',
+        meta: result.meta,
+        data: result.result,
+    })
+})
 
-        res.status(200).json({
-            message: 'Books retrieved successfully',
-            status: true,
-            data: result,
-        })
-    } catch (error: any) {
-        res.status(500).json({
-            message: error.message,
-            success: false,
-            error: {
-                name: error.name,
-                errors: error.errors,
-                stack: error.stack,
-            },
-        })
-    }
-}
+const getSingleProduct = catchAsync(async (req, res) => {
+    const { productId } = req.params
 
-const getSingleProduct = async (req: Request, res: Response) => {
-    try {
-        const { productId } = req.params
+    const result = await ProductServices.getSingleProductFromDB(productId)
 
-        const result = await ProductServices.getSingleProductFromDB(productId)
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Book retrieved successfully',
+        data: result,
+    })
+})
 
-        res.status(200).json({
-            message: 'Book retrieved successfully',
-            status: true,
-            data: result,
-        })
-    } catch (error: any) {
-        res.status(404).json({
-            message: error.message,
-            success: false,
-            error: {
-                name: error.name,
-                errors: error.errors,
-                stack: error.stack,
-            },
-        })
-    }
-}
+const updateProduct = catchAsync(async (req, res) => {
+    const { productId } = req.params
+    const { product: updatedProduct } = req.body
 
-const updateProduct = async (req: Request, res: Response) => {
-    try {
-        const { productId } = req.params
-        const updatedProduct = req.body
+    const result = await ProductServices.updateProductFromDB(
+        productId,
+        req.file,
+        updatedProduct,
+    )
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Book updated successfully',
+        data: result,
+    })
+})
 
-        const result = await ProductServices.updateProductFromDB(
-            productId,
-            updatedProduct,
-        )
+const deleteProduct = catchAsync(async (req, res) => {
+    const { productId } = req.params
 
-        res.status(200).json({
-            message: 'Book updated successfully',
-            status: true,
-            data: result,
-        })
-    } catch (error: any) {
-        res.status(500).json({
-            message: error.message,
-            success: false,
-            error: {
-                name: error.name,
-                errors: error.errors,
-                stack: error.stack,
-            },
-        })
-    }
-}
+    const result = await ProductServices.deleteProductFromDB(productId)
 
-const deleteProduct = async (req: Request, res: Response) => {
-    try {
-        const { productId } = req.params
-
-        const result = await ProductServices.deleteProductFromDB(productId)
-
-        res.status(200).json({
-            message: 'Book deleted successfully',
-            status: true,
-            data: result,
-        })
-    } catch (error: any) {
-        res.status(500).json({
-            message: error.message,
-            success: false,
-            error: {
-                name: error.name,
-                errors: error.errors,
-                stack: error.stack,
-            },
-        })
-    }
-}
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Book deleted successfully',
+        data: result,
+    })
+})
 
 export const productControllers = {
     createProduct,

@@ -77,10 +77,7 @@ const productSchema = new Schema<TProduct>(
         },
         inStock: {
             type: Boolean,
-            required: [
-                true,
-                'inStock status of the Product (Book) is required',
-            ],
+            default: true,
         },
     },
     {
