@@ -2,6 +2,7 @@ export const productsSearchableFields = [
     'title',
     'author',
     'category',
-    'price',
+    'minPrice',
+    'maxPrice',
     'inStock',
 ]

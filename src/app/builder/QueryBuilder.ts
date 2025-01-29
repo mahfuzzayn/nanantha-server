@@ -26,15 +26,48 @@ class QueryBuilder<T> {
     }
 
     filter() {
-        const queryObj = { ...this.query } // copy
+        const queryObj = { ...this.query } // Copy the query object
 
-        // Filtering
-        const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields']
-
+        // Exclude fields that are not part of the direct filter
+        const excludeFields = [
+            'searchTerm',
+            'sort',
+            'limit',
+            'page',
+            'fields',
+            'minPrice',
+            'maxPrice',
+            'author',
+            'category',
+        ]
         excludeFields.forEach(el => delete queryObj[el])
 
-        this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>)
+        // Handling price range
+        if (this.query.minPrice || this.query.maxPrice) {
+            const minPrice = parseFloat(this.query.minPrice as string)
+            const maxPrice = parseFloat(this.query.maxPrice as string)
 
+            if (!isNaN(minPrice) || !isNaN(maxPrice)) {
+                const priceFilter: Record<string, unknown> = {}
+                if (!isNaN(minPrice)) priceFilter.$gte = minPrice
+                if (!isNaN(maxPrice)) priceFilter.$lte = maxPrice
+                queryObj.price = priceFilter
+            }
+        }
+
+        // Handling category filtering
+        if (this.query.category) {
+            const categories = (this.query.category as string).split(',');
+            queryObj.category = { $in: categories };
+        }
+
+        // Handling author filtering
+        if (this.query.author) {
+            const authors = (this.query.author as string).split(',');
+            queryObj.author = { $in: authors };
+        }
+
+        this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>)
         return this
     }
 

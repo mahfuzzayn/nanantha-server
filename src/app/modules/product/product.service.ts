@@ -42,6 +42,27 @@ const getAllProductsFromDB = async (query: Record<string, unknown>) => {
     }
 }
 
+const getAllAuthorsFromDB = async () => {
+    const result = await Product.aggregate([
+        {
+            $group: {
+                _id: '$author',
+                books: {
+                    $push: '$title',
+                },
+            },
+        },
+        {
+            $project: {
+                _id: 0,
+                name: '$_id',
+                books: 1,
+            },
+        },
+    ])
+    return result
+}
+
 const getSingleProductFromDB = async (id: string) => {
     if (!validateObjectId(id)) {
         const error = new Error('The provided ID is invalid')
@@ -144,6 +165,7 @@ const deleteProductFromDB = async (id: string) => {
 export const ProductServices = {
     createProductIntoDB,
     getAllProductsFromDB,
+    getAllAuthorsFromDB,
     getSingleProductFromDB,
     getOrderProductFromDB,
     updateProductFromDB,

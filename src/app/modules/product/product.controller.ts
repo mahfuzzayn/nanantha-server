@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ProductServices } from './product.service'
 import sendResponse from '../../utils/sendResponse'
 import catchAsync from '../../utils/catchAsync'
@@ -29,6 +28,17 @@ const getAllProducts = catchAsync(async (req, res) => {
         message: 'Books retrieved successfully',
         meta: result.meta,
         data: result.result,
+    })
+})
+
+const getAllAuthors = catchAsync(async (req, res) => {
+    const result = await ProductServices.getAllAuthorsFromDB()
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Authors retrieved successfully',
+        data: result,
     })
 })
 
@@ -78,6 +88,7 @@ const deleteProduct = catchAsync(async (req, res) => {
 export const productControllers = {
     createProduct,
     getAllProducts,
+    getAllAuthors,
     getSingleProduct,
     updateProduct,
     deleteProduct,

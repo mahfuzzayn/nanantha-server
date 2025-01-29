@@ -22,6 +22,8 @@ router.post(
 
 router.get('/', productControllers.getAllProducts)
 
+router.get('/authors', productControllers.getAllAuthors)
+
 router.get('/:productId', productControllers.getSingleProduct)
 
 router.patch(
