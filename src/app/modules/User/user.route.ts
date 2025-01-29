@@ -9,6 +9,8 @@ const router = express.Router()
 
 router.get('/', UserControllers.getAllUsers)
 
+router.post('/me', UserControllers.getMe)
+
 router.post(
     '/register-user',
     validateRequest(UserValidations.registerUserValidationSchema),

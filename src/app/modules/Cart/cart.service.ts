@@ -14,17 +14,29 @@ const getSingleCartFromDB = async (userId: string) => {
 
 const addItemIntoDB = async (
     userId: string,
-    itemData: Omit<TCartItem, 'totalPrice' | 'title' | 'author' | 'price'>,
+    itemData: Omit<
+        TCartItem,
+        'totalPrice' | 'title' | 'image' | 'author' | 'price'
+    >,
 ) => {
     const { productId, quantity } = itemData
 
     const product = await Product.findById(productId)
     if (!product) throw new Error('Product not found')
 
-    const productTitle = product.title
-    const productAuthor = product.author
-    const productPrice = product.price
-    const totalPrice = productPrice * quantity
+    const {
+        title: productTitle,
+        author: productAuthor,
+        image: productImage,
+        price: productPrice,
+        quantity: productQuantity,
+    } = product
+
+    if (quantity > productQuantity) {
+        throw new Error('Not available in stock')
+    }
+
+    const totalPrice = parseFloat((productPrice * quantity).toFixed(2))
 
     let cart = await Cart.findOne({ userId })
 
@@ -36,6 +48,7 @@ const addItemIntoDB = async (
                     productId,
                     title: productTitle,
                     author: productAuthor,
+                    image: productImage,
                     price: productPrice,
                     quantity,
                     totalPrice,
@@ -50,13 +63,22 @@ const addItemIntoDB = async (
         )
 
         if (existingItem) {
-            existingItem.quantity += quantity
-            existingItem.totalPrice = existingItem.quantity * existingItem.price
+            const newQuantity = existingItem.quantity + quantity
+
+            if (newQuantity > productQuantity) {
+                throw new Error('Not available in stock')
+            }
+
+            existingItem.quantity = newQuantity
+            existingItem.totalPrice = parseFloat(
+                (existingItem.quantity * existingItem.price).toFixed(2),
+            )
         } else {
             cart.items.push({
                 productId,
                 title: productTitle,
                 author: productAuthor,
+                image: productImage,
                 price: productPrice,
                 quantity,
                 totalPrice,
@@ -67,9 +89,10 @@ const addItemIntoDB = async (
             (acc, item) => acc + item.quantity,
             0,
         )
-        cart.totalPrice = cart.items.reduce(
-            (acc, item) => acc + item.totalPrice,
-            0,
+        cart.totalPrice = parseFloat(
+            cart.items
+                .reduce((acc, item) => acc + item.totalPrice, 0)
+                .toFixed(2),
         )
     }
 
@@ -103,18 +126,28 @@ const updateItemQuantityInDB = async (
     )
     if (!item) throw new Error('Item not found in cart')
 
-    item.quantity += quantityChange
+    const product = await Product.findById(productId)
+    if (!product) throw new Error('Product not found')
 
-    if (item.quantity <= 0) {
+    const newQuantity = item.quantity + quantityChange
+
+    if (quantityChange > 0 && newQuantity > product.quantity) {
+        throw new Error('Not available in stock')
+    }
+
+    if (newQuantity <= 0) {
         cart.items = cart.items.filter(
             i => i.productId.toString() !== productId,
         )
     } else {
-        item.totalPrice = item.price * item.quantity
+        item.quantity = newQuantity
+        item.totalPrice = parseFloat((item.price * item.quantity).toFixed(2))
     }
 
     cart.totalItems = cart.items.reduce((acc, item) => acc + item.quantity, 0)
-    cart.totalPrice = cart.items.reduce((acc, item) => acc + item.totalPrice, 0)
+    cart.totalPrice = parseFloat(
+        cart.items.reduce((acc, item) => acc + item.totalPrice, 0).toFixed(2),
+    )
 
     return await cart.save()
 }

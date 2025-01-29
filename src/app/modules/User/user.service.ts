@@ -17,13 +17,23 @@ const getAllUsersFromDB = async (query: Record<string, unknown>) => {
     const meta = await usersQuery.countTotal()
 
     if (!result) {
-        throw new AppError(httpStatus.BAD_REQUEST, 'Failed to retrieve user')
+        throw new AppError(httpStatus.BAD_REQUEST, 'Failed to retrieve users')
     }
 
     return {
         meta,
         result,
     }
+}
+
+const getMeFromDB = async (userEmail: string) => {
+    const result = await User.findOne({ email: userEmail })
+
+    if (!result) {
+        throw new AppError(httpStatus.BAD_REQUEST, 'Failed to retrieve user')
+    }
+
+    return result
 }
 
 const registerUserIntoDB = async (payload: TUser) => {
@@ -49,6 +59,7 @@ const changeStatusIntoDB = async (id: string, payload: { status: string }) => {
 
 export const UserServices = {
     getAllUsersFromDB,
+    getMeFromDB,
     registerUserIntoDB,
     changeStatusIntoDB,
 }
