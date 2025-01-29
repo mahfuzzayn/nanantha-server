@@ -33,7 +33,7 @@ const addItemIntoDB = async (
     } = product
 
     if (quantity > productQuantity) {
-        throw new Error('Not available in stock')
+        throw new Error('No more stock available')
     }
 
     const totalPrice = parseFloat((productPrice * quantity).toFixed(2))
@@ -132,7 +132,7 @@ const updateItemQuantityInDB = async (
     const newQuantity = item.quantity + quantityChange
 
     if (quantityChange > 0 && newQuantity > product.quantity) {
-        throw new Error('Not available in stock')
+        throw new Error('No more stock available')
     }
 
     if (newQuantity <= 0) {

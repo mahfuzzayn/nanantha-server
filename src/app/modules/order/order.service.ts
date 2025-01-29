@@ -1,43 +1,44 @@
-import { ProductServices } from '../Product/product.service'
+import mongoose from 'mongoose'
+import { Product } from '../Product/product.model'
 import { TOrder } from './order.interface'
 import { Order } from './order.model'
 
 const orderProductIntoDB = async (orderData: TOrder) => {
-    const { product: productId, quantity, totalPrice } = orderData
+    const session = await mongoose.startSession()
+    session.startTransaction()
 
-    const productInDB = await ProductServices.getOrderProductFromDB(productId)
+    try {
+        for (const item of orderData.items) {
+            const product = await Product.findById(item.productId).session(
+                session,
+            )
 
-    if (!productInDB) {
-        throw new Error('Product not found')
+            if (!product) {
+                throw new Error(`Product with ID ${item.productId} not found`)
+            }
+
+            if (product.quantity < item.quantity) {
+                throw new Error(`Insufficient stock for ${product.title}`)
+            }
+
+            product.quantity -= item.quantity
+            if (product.quantity === 0) {
+                product.inStock = false
+            }
+            await product.save({ session })
+        }
+
+        const order = new Order(orderData)
+        const savedOrder = await order.save({ session })
+
+        await session.commitTransaction()
+        return savedOrder
+    } catch (error) {
+        await session.abortTransaction()
+        throw error
+    } finally {
+        session.endSession()
     }
-
-    if (productInDB.quantity < quantity) {
-        throw new Error('Insufficient stock available')
-    }
-
-    if (totalPrice > productInDB.price * quantity) {
-        throw new Error(
-            'The total price provided exceeds the calculated price for this order',
-        )
-    } else if (totalPrice !== productInDB.price * quantity) {
-        throw new Error(
-            'The total price provided is insufficient for this order',
-        )
-    }
-
-    const updatedProduct = await ProductServices.updateProductAfterOrderFromDB(
-        productId,
-        quantity,
-        productInDB,
-    )
-
-    if (!updatedProduct) {
-        throw new Error('Error updating product stock')
-    }
-
-    const result = await Order.create(orderData)
-
-    return result
 }
 
 const generateOrdersRevenueFromDB = async () => {

@@ -22,28 +22,28 @@ router.get(
 router.post(
     '/',
     auth(USER_ROLE.user),
-    validateRequest(CartValidations.addItemSchema),
+    validateRequest(CartValidations.addItemValidationSchema),
     cartControllers.addItem,
 )
 
 router.delete(
     '/',
     auth(USER_ROLE.user),
-    validateRequest(CartValidations.removeItemSchema),
+    validateRequest(CartValidations.removeItemValidationSchema),
     cartControllers.removeItem,
 )
 
 router.put(
     '/',
     auth(USER_ROLE.user),
-    validateRequest(CartValidations.updateQuantitySchema),
+    validateRequest(CartValidations.updateQuantityValidationSchema),
     cartControllers.updateItemQuantity,
 )
 
 router.delete(
     '/clear',
     auth(USER_ROLE.user),
-    validateRequest(CartValidations.clearCartSchema),
+    validateRequest(CartValidations.clearCartValidationSchema),
     cartControllers.clearCart,
 )
 

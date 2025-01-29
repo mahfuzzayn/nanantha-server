@@ -1,30 +1,44 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express'
 import { OrderServices } from './order.service'
+import sendResponse from '../../utils/sendResponse'
+import httpStatus from 'http-status'
+import Stripe from 'stripe'
+import catchAsync from '../../utils/catchAsync'
 
-const orderProduct = async (req: Request, res: Response) => {
-    try {
-        const orderData = req.body
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
-        const result = await OrderServices.orderProductIntoDB(orderData)
+const orderProduct = catchAsync(async (req, res) => {
+    const { order: orderData } = req.body
+    
+    const result = await OrderServices.orderProductIntoDB(orderData)
 
-        res.status(200).json({
-            message: 'Order created successfully',
-            status: true,
-            data: result,
-        })
-    } catch (error: any) {
-        res.status(404).json({
-            message: error.message,
-            success: false,
-            error: {
-                name: error.name,
-                errors: error.errors,
-                stack: error.stack,
-            },
-        })
-    }
-}
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Order created successfully',
+        data: result,
+    })
+})
+
+const createPaymentIntent = catchAsync(async (req, res) => {
+    const { amount, currency } = req.body
+
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.round(amount * 100),
+        currency: currency || 'usd',
+        payment_method_types: ['card'],
+    })
+
+    const result = { clientSecret: paymentIntent.client_secret }
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Payment intent created successfully',
+        data: result,
+    })
+})
 
 const generateRevenueOfOrders = async (req: Request, res: Response) => {
     try {
@@ -51,4 +65,5 @@ const generateRevenueOfOrders = async (req: Request, res: Response) => {
 export const orderControllers = {
     orderProduct,
     generateRevenueOfOrders,
+    createPaymentIntent,
 }

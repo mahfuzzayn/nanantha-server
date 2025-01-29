@@ -71,7 +71,7 @@ const productSchema = new Schema<TProduct>(
             type: Number,
             required: [true, 'Quantity of the Product (Book) is required'],
             validate: {
-                validator: (value: number) => value > 0,
+                validator: (value: number) => value >= 0,
                 message: '{VALUE} --- should only contain positive number',
             },
         },

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const addItemSchema = z.object({
+export const addItemValidationSchema = z.object({
     body: z.object({
         item: z.object({
             userId: z
@@ -25,7 +25,7 @@ export const addItemSchema = z.object({
     }),
 })
 
-export const removeItemSchema = z.object({
+export const removeItemValidationSchema = z.object({
     body: z.object({
         userId: z
             .string({
@@ -42,7 +42,7 @@ export const removeItemSchema = z.object({
     }),
 })
 
-export const updateQuantitySchema = z.object({
+export const updateQuantityValidationSchema = z.object({
     body: z.object({
         userId: z
             .string({
@@ -64,7 +64,7 @@ export const updateQuantitySchema = z.object({
     }),
 })
 
-export const clearCartSchema = z.object({
+export const clearCartValidationSchema = z.object({
     body: z.object({
         userId: z
             .string({
@@ -76,8 +76,8 @@ export const clearCartSchema = z.object({
 })
 
 export const CartValidations = {
-    addItemSchema,
-    removeItemSchema,
-    updateQuantitySchema,
-    clearCartSchema,
+    addItemValidationSchema,
+    removeItemValidationSchema,
+    updateQuantityValidationSchema,
+    clearCartValidationSchema,
 }
