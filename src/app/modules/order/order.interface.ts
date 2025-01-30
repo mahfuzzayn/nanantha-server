@@ -4,7 +4,7 @@ export type TOrder = {
     userId: Types.ObjectId
     items: TOrderItem[]
     total: number
-    status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled'
+    status: TOrderStatus
     transactionId: string
     createdAt?: string
 }
@@ -19,3 +19,10 @@ export type TOrderItem = {
     totalPrice: number
     _id: string
 }
+
+export type TOrderStatus =
+    | 'pending'
+    | 'confirmed'
+    | 'shipped'
+    | 'delivered'
+    | 'cancelled'

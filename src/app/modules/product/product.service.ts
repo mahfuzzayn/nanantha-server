@@ -117,6 +117,8 @@ const updateProductFromDB = async (
         payload.image = secure_url as string
     }
 
+    payload.inStock = payload.quantity ? true : false
+
     const result = await Product.findByIdAndUpdate(id, payload, {
         new: true,
         runValidators: true,

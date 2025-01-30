@@ -16,8 +16,8 @@ const getAllUsers = catchAsync(async (req, res) => {
 })
 
 const getMe = catchAsync(async (req, res) => {
-    const { email } = req.body
-    const result = await UserServices.getMeFromDB(email)
+    const { userId } = req.params
+    const result = await UserServices.getMeFromDB(userId)
 
     sendResponse(res, {
         statusCode: httpStatus.OK,

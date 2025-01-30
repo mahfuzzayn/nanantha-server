@@ -7,12 +7,30 @@ import { orderValidationSchema, OrderValidations } from './order.validation'
 
 const router = express.Router()
 
+router.get('/', auth(USER_ROLE.admin), orderControllers.getAllOrders)
+
+router.get('/:userId', auth(USER_ROLE.user), orderControllers.getUserOrders)
+
 router.post(
     '/',
     auth(USER_ROLE.user),
     validateRequest(orderValidationSchema),
-    orderControllers.orderProduct,
+    orderControllers.createOrder,
 )
+
+router.patch(
+    '/:orderId',
+    auth(USER_ROLE.admin),
+    orderControllers.updateOrderStatusByAdmin,
+)
+
+router.patch(
+    '/cancel/:orderId',
+    auth(USER_ROLE.user),
+    orderControllers.updateOrderStatusByUser,
+)
+
+router.delete('/:orderId', auth(USER_ROLE.admin), orderControllers.deleteOrder)
 
 router.post(
     '/create-payment-intent',

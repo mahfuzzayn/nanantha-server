@@ -26,8 +26,8 @@ const getAllUsersFromDB = async (query: Record<string, unknown>) => {
     }
 }
 
-const getMeFromDB = async (userEmail: string) => {
-    const result = await User.findOne({ email: userEmail })
+const getMeFromDB = async (id: string) => {
+    const result = await User.findById(id)
 
     if (!result) {
         throw new AppError(httpStatus.BAD_REQUEST, 'Failed to retrieve user')

@@ -7,9 +7,13 @@ import { USER_ROLE } from './user.constant'
 
 const router = express.Router()
 
-router.get('/', UserControllers.getAllUsers)
+router.get('/', auth(USER_ROLE.admin), UserControllers.getAllUsers)
 
-router.post('/me', UserControllers.getMe)
+router.get(
+    '/me/:userId',
+    auth(USER_ROLE.admin, USER_ROLE.user),
+    UserControllers.getMe,
+)
 
 router.post(
     '/register-user',

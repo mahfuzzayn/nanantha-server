@@ -8,15 +8,81 @@ import catchAsync from '../../utils/catchAsync'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
-const orderProduct = catchAsync(async (req, res) => {
+const getAllOrders = catchAsync(async (req, res) => {
+    const result = await OrderServices.getAllOrdersFromDB()
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Orders retrieved successfully',
+        data: result,
+    })
+})
+
+const getUserOrders = catchAsync(async (req, res) => {
+    const { userId } = req.params
+    const result = await OrderServices.getSingleUserOrdersFromDB(userId)
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Orders retrieved successfully',
+        data: result,
+    })
+})
+
+const createOrder = catchAsync(async (req, res) => {
     const { order: orderData } = req.body
-    
-    const result = await OrderServices.orderProductIntoDB(orderData)
+
+    const result = await OrderServices.createOrderIntoDB(orderData)
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: 'Order created successfully',
+        data: result,
+    })
+})
+
+const updateOrderStatusByUser = catchAsync(async (req, res) => {
+    const { orderId } = req.params
+
+    const result = await OrderServices.updateOrderStatusByUserIntoDB(orderId)
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Order status updated successfully',
+        data: result,
+    })
+})
+
+const updateOrderStatusByAdmin = catchAsync(async (req, res) => {
+    const { orderId } = req.params
+    const { status } = req.body
+
+    const result = await OrderServices.updateOrderStatusByAdminIntoDB(
+        orderId,
+        status,
+    )
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Order status updated successfully',
+        data: result,
+    })
+})
+
+const deleteOrder = catchAsync(async (req, res) => {
+    const { orderId } = req.params
+
+    const result = await OrderServices.deleteOrderFromDB(orderId)
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Order deleted successfully',
         data: result,
     })
 })
@@ -63,7 +129,12 @@ const generateRevenueOfOrders = async (req: Request, res: Response) => {
 }
 
 export const orderControllers = {
-    orderProduct,
-    generateRevenueOfOrders,
+    getAllOrders,
+    getUserOrders,
+    createOrder,
+    updateOrderStatusByUser,
+    updateOrderStatusByAdmin,
+    deleteOrder,
     createPaymentIntent,
+    generateRevenueOfOrders,
 }

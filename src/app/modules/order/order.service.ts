@@ -1,9 +1,29 @@
 import mongoose from 'mongoose'
 import { Product } from '../Product/product.model'
-import { TOrder } from './order.interface'
+import { TOrder, TOrderStatus } from './order.interface'
 import { Order } from './order.model'
 
-const orderProductIntoDB = async (orderData: TOrder) => {
+const validStatusTransitions: Record<string, string[]> = {
+    pending: ['confirmed', 'cancelled'],
+    confirmed: ['shipped', 'cancelled'],
+    shipped: ['delivered'],
+    delivered: [],
+    cancelled: [],
+}
+
+const getAllOrdersFromDB = async () => {
+    const result = await Order.find()
+
+    return result
+}
+
+const getSingleUserOrdersFromDB = async (userId: string) => {
+    const result = await Order.find({ userId })
+
+    return result
+}
+
+const createOrderIntoDB = async (orderData: TOrder) => {
     const session = await mongoose.startSession()
     session.startTransaction()
 
@@ -39,6 +59,59 @@ const orderProductIntoDB = async (orderData: TOrder) => {
     } finally {
         session.endSession()
     }
+}
+
+const updateOrderStatusByUserIntoDB = async (id: string) => {
+    const order = await Order.findById(id)
+
+    if (!order) {
+        throw new Error('No order found')
+    }
+
+    if (order.status === 'delivered') {
+        throw new Error('Order is already delivered')
+    } else if (order.status === 'cancelled') {
+        throw new Error('Order is already cancelled')
+    }
+
+    const result = await Order.findByIdAndUpdate(
+        id,
+        { status: 'cancelled' },
+        { new: true, runValidators: true },
+    )
+
+    return result
+}
+
+const updateOrderStatusByAdminIntoDB = async (
+    id: string,
+    status: TOrderStatus,
+) => {
+    const order = await Order.findById(id)
+
+    if (!order) {
+        throw new Error('No order found')
+    }
+
+    if (!validStatusTransitions[order.status]?.includes(status)) {
+        throw new Error(
+            `Invalid status transition from ${order.status} to ${status}`,
+        )
+    }
+
+    const result = await Order.findByIdAndUpdate(
+        id,
+        { status },
+        { new: true, runValidators: true },
+    )
+
+    return result
+}
+
+const deleteOrderFromDB = async (id: string) => {
+    const result = await Order.findByIdAndDelete(id)
+
+    return result
 }
 
 const generateOrdersRevenueFromDB = async () => {
@@ -84,6 +157,11 @@ const generateOrdersRevenueFromDB = async () => {
 }
 
 export const OrderServices = {
-    orderProductIntoDB,
+    getAllOrdersFromDB,
+    getSingleUserOrdersFromDB,
+    createOrderIntoDB,
+    updateOrderStatusByUserIntoDB,
+    updateOrderStatusByAdminIntoDB,
+    deleteOrderFromDB,
     generateOrdersRevenueFromDB,
 }
