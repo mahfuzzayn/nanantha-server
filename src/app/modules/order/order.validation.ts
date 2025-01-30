@@ -37,7 +37,7 @@ export const orderValidationSchema = z.object({
             status: z
                 .enum([
                     'pending',
-                    'confirmed',
+                    'approved',
                     'shipped',
                     'delivered',
                     'cancelled',

@@ -21,6 +21,13 @@ router.post(
     UserControllers.registerUser,
 )
 
+router.patch(
+    '/update-user/:userId',
+    auth(USER_ROLE.admin, USER_ROLE.user),
+    validateRequest(UserValidations.updateUserValidationSchema),
+    UserControllers.updateUser,
+)
+
 router.post(
     '/change-status/:id',
     auth(USER_ROLE.admin),

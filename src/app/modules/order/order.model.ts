@@ -2,10 +2,18 @@ import mongoose, { Schema } from 'mongoose'
 import { TOrder } from './order.interface'
 
 const OrderSchema = new Schema<TOrder>({
-    userId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
     items: [
         {
-            productId: { type: mongoose.Schema.Types.ObjectId, required: true },
+            productId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Product',
+                required: true,
+            },
             title: { type: String, required: true },
             author: { type: String, required: true },
             image: { type: String, required: true },
@@ -18,7 +26,7 @@ const OrderSchema = new Schema<TOrder>({
     total: { type: Number, required: true },
     status: {
         type: String,
-        enum: ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'],
+        enum: ['pending', 'approved', 'shipped', 'delivered', 'cancelled'],
         default: 'pending',
     },
     transactionId: { type: String, required: true },

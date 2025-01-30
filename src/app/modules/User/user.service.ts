@@ -1,9 +1,11 @@
 import AppError from '../../errors/AppError'
-import { TUser } from './user.interface'
+import { TUpdateUser, TUser } from './user.interface'
 import httpStatus from 'http-status'
 import { User } from '../User/user.model'
 import QueryBuilder from '../../builder/QueryBuilder'
 import { userSearchableFields } from './user.constant'
+import config from '../../config'
+import bcrypt from 'bcrypt'
 
 const getAllUsersFromDB = async (query: Record<string, unknown>) => {
     const usersQuery = new QueryBuilder(User.find({ role: 'user' }), query)
@@ -50,6 +52,56 @@ const registerUserIntoDB = async (payload: TUser) => {
     return newUser
 }
 
+const updateUserIntoDB = async (id: string, payload: TUpdateUser) => {
+    const user = await User.findById(id).select('+password')
+
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, 'User not found')
+    }
+
+    const updateData: Partial<TUpdateUser> = {}
+
+    if (payload?.oldPassword && payload?.newPassword) {
+        const isOldPasswordValid = await User.isPasswordMatched(
+            payload.oldPassword,
+            user.password,
+        )
+
+        if (!isOldPasswordValid) {
+            throw new AppError(
+                httpStatus.BAD_REQUEST,
+                'Old password is incorrect',
+            )
+        }
+
+        const hashedPassword = await bcrypt.hash(
+            payload.newPassword,
+            Number(config.bcrypt_salt_rounds),
+        )
+
+        updateData.password = hashedPassword
+    }
+
+    if (payload?.name) {
+        updateData.name = payload.name
+    }
+
+    if (Object.keys(updateData).length === 0) {
+        throw new AppError(httpStatus.BAD_REQUEST, 'No changes detected')
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(id, updateData, {
+        new: true,
+        runValidators: true,
+    })
+
+    if (!updatedUser) {
+        throw new AppError(httpStatus.BAD_REQUEST, 'Failed to update user')
+    }
+
+    return updatedUser
+}
+
 const changeStatusIntoDB = async (id: string, payload: { status: string }) => {
     const result = await User.findByIdAndUpdate(id, payload, {
         new: true,
@@ -61,5 +113,6 @@ export const UserServices = {
     getAllUsersFromDB,
     getMeFromDB,
     registerUserIntoDB,
+    updateUserIntoDB,
     changeStatusIntoDB,
 }

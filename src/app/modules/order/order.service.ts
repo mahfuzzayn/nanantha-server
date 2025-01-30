@@ -4,15 +4,15 @@ import { TOrder, TOrderStatus } from './order.interface'
 import { Order } from './order.model'
 
 const validStatusTransitions: Record<string, string[]> = {
-    pending: ['confirmed', 'cancelled'],
-    confirmed: ['shipped', 'cancelled'],
+    pending: ['approved', 'cancelled'],
+    approved: ['shipped', 'cancelled'],
     shipped: ['delivered'],
     delivered: [],
     cancelled: [],
 }
 
 const getAllOrdersFromDB = async () => {
-    const result = await Order.find()
+    const result = await Order.find().populate("userId")
 
     return result
 }

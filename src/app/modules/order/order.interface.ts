@@ -22,7 +22,7 @@ export type TOrderItem = {
 
 export type TOrderStatus =
     | 'pending'
-    | 'confirmed'
+    | 'approved'
     | 'shipped'
     | 'delivered'
     | 'cancelled'

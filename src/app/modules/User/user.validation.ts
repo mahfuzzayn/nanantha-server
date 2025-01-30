@@ -12,6 +12,14 @@ const registerUserValidationSchema = z.object({
     }),
 })
 
+const updateUserValidationSchema = z.object({
+    body: z.object({
+        name: z.string().optional(),
+        oldPassword: z.string().optional(),
+        newPassword: z.string().optional(),
+    }),
+})
+
 const changeStatusValidationSchema = z.object({
     body: z.object({
         isDeactivated: z.boolean({
@@ -22,5 +30,6 @@ const changeStatusValidationSchema = z.object({
 
 export const UserValidations = {
     registerUserValidationSchema,
+    updateUserValidationSchema,
     changeStatusValidationSchema,
 }

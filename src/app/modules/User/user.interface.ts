@@ -10,6 +10,13 @@ export type TUser = {
     isDeactivated: boolean
 }
 
+export type TUpdateUser = {
+    name: string
+    password: string;
+    oldPassword: string
+    newPassword: string
+}
+
 export interface UserModel extends Model<TUser> {
     // Instance method for checking if the user exist
     isUserExistsByEmail(id: string): Promise<TUser>
