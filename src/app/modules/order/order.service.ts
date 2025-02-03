@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import { Product } from '../Product/product.model'
 import { TOrder, TOrderStatus } from './order.interface'
 import { Order } from './order.model'
+import QueryBuilder from '../../builder/QueryBuilder'
 
 const validStatusTransitions: Record<string, string[]> = {
     pending: ['approved', 'cancelled'],
@@ -11,16 +12,42 @@ const validStatusTransitions: Record<string, string[]> = {
     cancelled: [],
 }
 
-const getAllOrdersFromDB = async () => {
-    const result = await Order.find().populate("userId")
+const getAllOrdersFromDB = async (query: Record<string, unknown>) => {
+    const ordersQuery = new QueryBuilder(Order.find().populate('userId'), query)
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
 
-    return result
+    const result = await ordersQuery.modelQuery
+    const meta = await ordersQuery.countTotal()
+
+    return {
+        meta,
+        result,
+    }
 }
 
-const getSingleUserOrdersFromDB = async (userId: string) => {
-    const result = await Order.find({ userId })
+const getSingleUserOrdersFromDB = async (
+    userId: string,
+    query: Record<string, unknown>,
+) => {
+    const ordersQuery = new QueryBuilder(
+        Order.find({ userId }).populate('userId'),
+        query,
+    )
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
 
-    return result
+    const result = await ordersQuery.modelQuery
+    const meta = await ordersQuery.countTotal()
+
+    return {
+        meta,
+        result,
+    }
 }
 
 const createOrderIntoDB = async (orderData: TOrder) => {

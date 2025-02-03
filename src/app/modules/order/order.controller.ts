@@ -9,25 +9,30 @@ import catchAsync from '../../utils/catchAsync'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
 const getAllOrders = catchAsync(async (req, res) => {
-    const result = await OrderServices.getAllOrdersFromDB()
+    const result = await OrderServices.getAllOrdersFromDB(req.query)
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: 'Orders retrieved successfully',
-        data: result,
+        meta: result.meta,
+        data: result.result,
     })
 })
 
 const getUserOrders = catchAsync(async (req, res) => {
     const { userId } = req.params
-    const result = await OrderServices.getSingleUserOrdersFromDB(userId)
+    const result = await OrderServices.getSingleUserOrdersFromDB(
+        userId,
+        req.query,
+    )
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: 'Orders retrieved successfully',
-        data: result,
+        meta: result.meta,
+        data: result.result,
     })
 })
 
