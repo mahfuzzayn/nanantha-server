@@ -8,18 +8,14 @@ const app: Application = express()
 
 // parser
 app.use(express.json())
-app.use(cors({ origin: ['http://localhost:5173'], credentials: true }));
+app.use(cors({ origin: ['http://localhost:5173'], credentials: true }))
 
 // application routes
 app.use('/api/v1', router)
 
 // homepage routes
 app.get('/', (req: Request, res: Response) => {
-    const filePath = path.join(
-        __dirname,
-        'app/config',
-        'homepage.json',
-    )
+    const filePath = path.join(__dirname, 'app/config', 'homepage.json')
 
     fs.readFile(filePath, 'utf-8', (err, data) => {
         if (err) {

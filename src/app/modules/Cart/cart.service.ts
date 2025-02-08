@@ -59,7 +59,7 @@ const addItemIntoDB = async (
         })
     } else {
         const existingItem = cart.items.find(
-            item => item.productId.toString() === productId,
+            item => item.productId.toString() === productId.toString(),
         )
 
         if (existingItem) {
