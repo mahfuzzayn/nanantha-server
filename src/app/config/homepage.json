@@ -1,16 +1,16 @@
 {
     "message": "Welcome to our Book Shop API",
-    "description": "This API allows you to manage products, orders, and calculate revenue.",
+    "description": "This API allows you to manage products, carts & orders",
     "endpoints": [
         {
-            "path": "/api/products",
+            "path": "/api/v1/products",
             "methods": {
                 "GET": "Retrieve all books",
                 "POST": "Create a new book"
             }
         },
         {
-            "path": "/api/products/:productId",
+            "path": "/api/v1/products/:productId",
             "methods": {
                 "GET": "Retrieve a specific book by ID",
                 "PUT": "Update a book by ID & changes",
@@ -18,18 +18,18 @@
             }
         },
         {
-            "path": "/api/orders",
+            "path": "/api/v1/orders",
             "methods": {
                 "POST": "Create a new book order"
             }
         },
         {
-            "path": "/api/orders/revenue",
+            "path": "/api/v1/carts",
             "methods": {
-                "GET": "Retrieve total revenue of all orders"
+                "POST": "Create a new book order"
             }
         }
     ],
-    "documentation": "For more details, visit [Github Repository](https://github.com/mahfuzzayn/book-shop-b4a2v1-server)",
+    "documentation": "For more details, visit [Github Repository](https://github.com/mahfuzzayn/book-shop-b4a4v1-server)",
     "devInfo": "Developed by Mahfuz Zayn"
 }
