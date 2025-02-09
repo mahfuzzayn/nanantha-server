@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
-
 export type TOrder = {
+    _id: Types.ObjectId
     userId: Types.ObjectId
     items: TOrderItem[]
     total: number
@@ -10,6 +10,7 @@ export type TOrder = {
 }
 
 export type TOrderItem = {
+    _id: Types.ObjectId
     productId: Types.ObjectId
     title: string
     author: string
@@ -17,7 +18,6 @@ export type TOrderItem = {
     price: number
     quantity: number
     totalPrice: number
-    _id: string
 }
 
 export type TOrderStatus =
