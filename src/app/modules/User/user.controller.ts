@@ -1,70 +1,72 @@
-import httpStatus from 'http-status'
-import catchAsync from '../../utils/catchAsync'
-import sendResponse from '../../utils/sendResponse'
-import { UserServices } from './user.service'
+import { StatusCodes } from "http-status-codes";
+import catchAsync from "../../utils/catchAsync";
+import sendResponse from "../../utils/sendResponse";
+import { UserServices } from "./user.service";
+import { IImageFile } from "../../interface/IImageFile";
+import { IJwtPayload } from "../auth/auth.interface";
 
 const getAllUsers = catchAsync(async (req, res) => {
-    const result = await UserServices.getAllUsersFromDB(req.query)
+    const result = await UserServices.getAllUsersFromDB(req.query);
 
     sendResponse(res, {
-        statusCode: httpStatus.OK,
+        statusCode: StatusCodes.OK,
         success: true,
-        message: 'Users retrieved successfully',
+        message: "Users retrieved successfully",
         meta: result.meta,
         data: result.result,
-    })
-})
+    });
+});
 
 const getMe = catchAsync(async (req, res) => {
-    const { userId } = req.params
-    const result = await UserServices.getMeFromDB(userId)
+    const { userId } = req.params;
+    const result = await UserServices.getMeFromDB(userId);
 
     sendResponse(res, {
-        statusCode: httpStatus.OK,
+        statusCode: StatusCodes.OK,
         success: true,
-        message: 'User retrieved successfully',
+        message: "User retrieved successfully",
         data: result,
-    })
-})
+    });
+});
 
 const registerUser = catchAsync(async (req, res) => {
-    const { user: userData } = req.body
-
-    const result = await UserServices.registerUserIntoDB(userData)
+    const result = await UserServices.registerUserIntoDB(req.body);
 
     sendResponse(res, {
-        statusCode: httpStatus.OK,
+        statusCode: StatusCodes.OK,
         success: true,
-        message: 'User registered successfully',
+        message: "User registered successfully",
         data: result,
-    })
-})
+    });
+});
 
 const updateUser = catchAsync(async (req, res) => {
-    const { userId } = req.params
-
-    const result = await UserServices.updateUserIntoDB(userId, req.body)
+    const result = await UserServices.updateUserIntoDB(
+        req.file as IImageFile,
+        req.body,
+        req.user as IJwtPayload
+    );
 
     sendResponse(res, {
-        statusCode: httpStatus.OK,
+        statusCode: StatusCodes.OK,
         success: true,
-        message: 'User updated successfully',
+        message: "User updated successfully",
         data: result,
-    })
-})
+    });
+});
 
 const changeStatus = catchAsync(async (req, res) => {
-    const id = req.params.id
+    const id = req.params.id;
 
-    const result = await UserServices.changeStatusIntoDB(id, req.body)
+    const result = await UserServices.changeStatusIntoDB(id, req.body);
 
     sendResponse(res, {
-        statusCode: httpStatus.OK,
+        statusCode: StatusCodes.OK,
         success: true,
-        message: 'Status is updated successfully',
+        message: "Status is updated successfully",
         data: result,
-    })
-})
+    });
+});
 
 export const UserControllers = {
     getAllUsers,
@@ -72,4 +74,4 @@ export const UserControllers = {
     registerUser,
     updateUser,
     changeStatus,
-}
+};

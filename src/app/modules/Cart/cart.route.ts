@@ -1,50 +1,45 @@
-import express from 'express'
-import { cartControllers } from './cart.controller'
-import auth from '../../middlewares/auth'
-import { USER_ROLE } from '../User/user.constant'
-import { CartValidations } from './cart.validation'
-import validateRequest from '../../middlewares/validateRequest'
+import express from "express";
+import { cartControllers } from "./cart.controller";
+import { CartValidations } from "./cart.validation";
+import auth from "../../middleware/auth";
+import validateRequest from "../../middleware/validateRequest";
+import { UserRole } from "../user/user.interface";
 
-const router = express.Router()
+const router = express.Router();
 
-router.get(
-    '/',
-    auth(USER_ROLE.admin),
-    cartControllers.getAllCarts,
-)
+router.get("/", auth(UserRole.ADMIN), cartControllers.getAllCarts);
 
 router.get(
-    '/:userId',
-    auth(USER_ROLE.user, USER_ROLE.admin),
-    cartControllers.getSingleCart,
-)
+    "/:userId",
+    auth(UserRole.USER, UserRole.ADMIN),
+    cartControllers.getSingleCart
+);
 
 router.post(
-    '/',
-    auth(USER_ROLE.user),
+    "/",
+    auth(UserRole.USER),
     validateRequest(CartValidations.addItemValidationSchema),
-    cartControllers.addItem,
-)
+    cartControllers.addItem
+);
 
 router.delete(
-    '/',
-    auth(USER_ROLE.user),
+    "/",
+    auth(UserRole.USER),
     validateRequest(CartValidations.removeItemValidationSchema),
-    cartControllers.removeItem,
-)
+    cartControllers.removeItem
+);
 
 router.put(
-    '/',
-    auth(USER_ROLE.user),
+    "/",
+    auth(UserRole.USER),
     validateRequest(CartValidations.updateQuantityValidationSchema),
-    cartControllers.updateItemQuantity,
-)
+    cartControllers.updateItemQuantity
+);
 
 router.delete(
-    '/clear',
-    auth(USER_ROLE.user),
-    validateRequest(CartValidations.clearCartValidationSchema),
-    cartControllers.clearCart,
-)
+    "/clear",
+    auth(UserRole.USER),
+    cartControllers.clearCart
+);
 
-export const CartRoutes = router
+export const CartRoutes = router;

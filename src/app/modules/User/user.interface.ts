@@ -1,33 +1,40 @@
-import { Model, Types } from 'mongoose'
+import { Model, Types } from "mongoose";
 
-export type TUser = {
-    _id: Types.ObjectId
-    name: string
-    email: string
-    password: string
-    passwordChangedAt?: Date
-    role: 'user' | 'admin'
-    isDeactivated: boolean
+export enum UserRole {
+    USER = "user",
+    ADMIN = "admin",
 }
 
-export type TUpdateUser = {
-    name: string
+export interface IUser {
+    _id: Types.ObjectId;
+    name: string;
+    email: string;
     password: string;
-    oldPassword: string
-    newPassword: string
+    passwordChangedAt?: Date;
+    profileUrl: string;
+    role: UserRole;
+    isActive: boolean;
 }
 
-export interface UserModel extends Model<TUser> {
+export interface IUpdateUser {
+    name: string;
+    password: string;
+    oldPassword: string;
+    newPassword: string;
+    profileUrl: string;
+}
+
+export interface UserModel extends Model<IUser> {
     // Instance method for checking if the user exist
-    isUserExistsByEmail(id: string): Promise<TUser>
+    isUserExistsByEmail(id: string): Promise<IUser>;
     // Instance method for checking if passwords are matched
     isPasswordMatched(
         plainTextPassword: string,
-        hashedPassword: string,
-    ): Promise<boolean>
+        hashedPassword: string
+    ): Promise<boolean>;
     // Instance method for checking if jwt issued before password change
     isJWTIssuedBeforePasswordChanged(
         passwordChangedTimestamp: Date,
-        jwtIssuedTimestamp: number,
-    ): boolean
+        jwtIssuedTimestamp: number
+    ): boolean;
 }

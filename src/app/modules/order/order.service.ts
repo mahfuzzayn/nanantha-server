@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { Product } from '../Product/product.model'
+import { Product } from '../product/product.model'
 import { TOrder, TOrderStatus } from './order.interface'
 import { Order } from './order.model'
 import QueryBuilder from '../../builder/QueryBuilder'
@@ -50,12 +50,12 @@ const getSingleUserOrdersFromDB = async (
     }
 }
 
-const createOrderIntoDB = async (orderData: TOrder) => {
+const createOrderIntoDB = async (payload: TOrder) => {
     const session = await mongoose.startSession()
     session.startTransaction()
 
     try {
-        for (const item of orderData.items) {
+        for (const item of payload.items) {
             const product = await Product.findById(item.productId).session(
                 session,
             )
@@ -75,7 +75,7 @@ const createOrderIntoDB = async (orderData: TOrder) => {
             await product.save({ session })
         }
 
-        const order = new Order(orderData)
+        const order = new Order(payload)
         const savedOrder = await order.save({ session })
 
         await session.commitTransaction()

@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose'
 import { TOrder } from './order.interface'
 
 const OrderSchema = new Schema<TOrder>({
-    userId: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,

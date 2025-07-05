@@ -1,91 +1,87 @@
-import sendResponse from '../../utils/sendResponse'
-import catchAsync from '../../utils/catchAsync'
-import httpStatus from 'http-status'
-import { CartServices } from './cart.service'
+import sendResponse from "../../utils/sendResponse";
+import catchAsync from "../../utils/catchAsync";
+import { CartServices } from "./cart.service";
+import { StatusCodes } from "http-status-codes";
+import { IJwtPayload } from "../auth/auth.interface";
 
 const getAllCarts = catchAsync(async (req, res) => {
-    const result = await CartServices.getAllCartsFromDB()
+    const result = await CartServices.getAllCartsFromDB();
 
     sendResponse(res, {
-        statusCode: httpStatus.OK,
+        statusCode: StatusCodes.OK,
         success: true,
-        message: 'All carts retrieved successfully',
+        message: "All carts retrieved successfully",
         data: result,
-    })
-})
+    });
+});
 
 const getSingleCart = catchAsync(async (req, res) => {
-    const { userId } = req.params
+    const { userId } = req.params;
 
-    const result = await CartServices.getSingleCartFromDB(userId)
+    const result = await CartServices.getSingleCartFromDB(userId);
 
     sendResponse(res, {
-        statusCode: httpStatus.OK,
+        statusCode: StatusCodes.OK,
         success: true,
-        message: 'User cart retrieved successfully',
+        message: "User cart retrieved successfully",
         data: result,
-    })
-})
+    });
+});
 
 const addItem = catchAsync(async (req, res) => {
-    const { item } = req.body
-    const { userId, ...itemData } = item
-
-    const result = await CartServices.addItemIntoDB(userId, itemData)
+    const result = await CartServices.addItemIntoDB(req.body, req.user as IJwtPayload);
 
     sendResponse(res, {
-        statusCode: httpStatus.OK,
+        statusCode: StatusCodes.OK,
         success: true,
-        message: 'Item added to cart successfully',
+        message: "Item added to cart successfully",
         data: result,
-    })
-})
+    });
+});
 
 const removeItem = catchAsync(async (req, res) => {
-    const { userId, productId } = req.body
+    const { productId } = req.body;
 
     const result = await CartServices.removeItemFromDB(
-        userId as string,
         productId,
-    )
+        req.user as IJwtPayload,
+    );
 
     sendResponse(res, {
-        statusCode: httpStatus.OK,
+        statusCode: StatusCodes.OK,
         success: true,
-        message: 'Item removed from cart successfully',
+        message: "Item removed from cart successfully",
         data: result,
-    })
-})
+    });
+});
 
 const updateItemQuantity = catchAsync(async (req, res) => {
-    const { userId, productId, quantity } = req.body
+    const { productId, quantity } = req.body;
 
     const result = await CartServices.updateItemQuantityInDB(
-        userId as string,
         productId,
         quantity,
-    )
+        req.user as IJwtPayload
+    );
 
     sendResponse(res, {
-        statusCode: httpStatus.OK,
+        statusCode: StatusCodes.OK,
         success: true,
-        message: 'Item quantity updated successfully',
+        message: "Item quantity updated successfully",
         data: result,
-    })
-})
+    });
+});
 
 const clearCart = catchAsync(async (req, res) => {
-    const { userId } = req.body
-
-    const result = await CartServices.clearCartInDB(userId as string)
+    const result = await CartServices.clearCartInDB(req.user as IJwtPayload);
 
     sendResponse(res, {
-        statusCode: httpStatus.OK,
+        statusCode: StatusCodes.OK,
         success: true,
-        message: 'Cart cleared successfully',
+        message: "Cart cleared successfully",
         data: result,
-    })
-})
+    });
+});
 
 export const cartControllers = {
     getAllCarts,
@@ -94,4 +90,4 @@ export const cartControllers = {
     removeItem,
     updateItemQuantity,
     clearCart,
-}
+};

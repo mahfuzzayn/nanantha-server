@@ -1,89 +1,68 @@
-import httpStatus from 'http-status'
-import config from '../../config'
-import AppError from '../../errors/AppError'
-import { User } from '../User/user.model'
-import { TLoginUser } from './auth.interface'
-import { createToken } from './auth.utils'
-import bcrypt from 'bcrypt'
-import { JwtPayload } from 'jsonwebtoken'
+import { StatusCodes } from "http-status-codes";
+import AppError from "../../errors/appError";
+import { IAuth, IJwtPayload } from "./auth.interface";
+import { createToken } from "./auth.utils";
+import config from "../../config";
+import { User } from "../user/user.model";
 
-const loginUserFromDB = async (payload: TLoginUser) => {
-    const user = await User.isUserExistsByEmail(payload.email)
+const loginUser = async (payload: IAuth) => {
+    try {
+        const user = await User.findOne({ email: payload.email }).select(
+            "+password"
+        );
 
-    if (!user) {
-        throw new AppError(httpStatus.NOT_FOUND, 'User not found!')
+        if (!user) {
+            throw new AppError(
+                StatusCodes.NOT_FOUND,
+                "This user is not found!"
+            );
+        }
+
+        if (!user.isActive) {
+            throw new AppError(
+                StatusCodes.FORBIDDEN,
+                "This user is not active!"
+            );
+        }
+
+        if (
+            !(await User.isPasswordMatched(payload?.password, user?.password))
+        ) {
+            throw new AppError(
+                StatusCodes.FORBIDDEN,
+                "Password does not match"
+            );
+        }
+
+        const jwtPayload: IJwtPayload = {
+            userId: user._id,
+            name: user.name as string,
+            email: user.email as string,
+            isActive: user.isActive,
+            role: user.role,
+        };
+
+        const accessToken = createToken(
+            jwtPayload,
+            config.jwt_access_secret as string,
+            config.jwt_access_expires_in as string
+        );
+
+        const refreshToken = createToken(
+            jwtPayload,
+            config.jwt_refresh_secret as string,
+            config.jwt_refresh_expires_in as string
+        );
+
+        return {
+            accessToken,
+            refreshToken,
+        };
+    } catch (error) {
+        throw error;
     }
+};
 
-    const isDeactivated = user?.isDeactivated
-
-    if (isDeactivated) {
-        throw new AppError(httpStatus.FORBIDDEN, 'User is deactivated!')
-    }
-
-    if (!(await User.isPasswordMatched(payload?.password, user?.password)))
-        throw new AppError(httpStatus.FORBIDDEN, 'User password is wrong')
-
-    const jwtPayload = {
-        userEmail: user.email,
-        userId: user._id,
-        role: user.role,
-    }
-
-    const accessToken = createToken(
-        jwtPayload,
-        config.jwt_access_secret as string,
-        config.jwt_access_expires_in as string,
-    )
-
-    return {
-        accessToken,
-    }
-}
-
-const changePasswordIntoDB = async (
-    userData: JwtPayload,
-    payload: { oldPassword: string; newPassword: string },
-) => {
-    // Checking if the user is exist
-    const user = await User.isUserExistsByEmail(userData.userEmail)
-
-    if (!user) {
-        throw new AppError(httpStatus.NOT_FOUND, 'User is not found !')
-    }
-
-    const isDeactivated = user?.isDeactivated
-
-    if (isDeactivated) {
-        throw new AppError(httpStatus.FORBIDDEN, 'This user is deactivated!')
-    }
-
-    // Checking if the password is correct
-    if (!(await User.isPasswordMatched(payload.oldPassword, user?.password)))
-        throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched')
-
-    // Hashing new password
-    const newHashedPassword = await bcrypt.hash(
-        payload.newPassword,
-        Number(config.bcrypt_salt_rounds),
-    )
-
-    const result = await User.findOneAndUpdate(
-        {
-            email: userData.userEmail,
-            role: userData.role,
-        },
-        {
-            password: newHashedPassword,
-            passwordChangedAt: new Date(),
-        },
-    )
-
-    return {
-        passwordChangedAt: result?.passwordChangedAt,
-    }
-}
-
-export const AuthServices = {
-    loginUserFromDB,
-    changePasswordIntoDB,
-}
+export const AuthService = {
+    loginUser,
+};

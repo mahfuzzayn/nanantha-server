@@ -1,47 +1,42 @@
-import express, { NextFunction, Request, Response } from 'express'
-import { productControllers } from './product.controller'
-import { upload } from '../../utils/sendImageToCloudinary'
-import { ProductValidations } from './product.validation'
-import validateRequest from '../../middlewares/validateRequest'
-import auth from '../../middlewares/auth'
-import { USER_ROLE } from '../User/user.constant'
+import express, { NextFunction, Request, Response } from "express";
+import { productControllers } from "./product.controller";
+import { ProductValidations } from "./product.validation";
+import auth from "../../middleware/auth";
+import { UserRole } from "../user/user.interface";
+import validateRequest from "../../middleware/validateRequest";
+import { multerUpload } from "../../config/multer.config";
+import { parseBody } from "../../middleware/bodyParse";
 
-const router = express.Router()
+const router = express.Router();
 
 router.post(
-    '/create-product',
-    auth(USER_ROLE.admin),
-    upload.single('file'),
-    (req: Request, res: Response, next: NextFunction) => {
-        req.body = JSON.parse(req.body.data)
-        next()
-    },
+    "/create-product",
+    auth(UserRole.ADMIN),
+    multerUpload.single("image"),
+    parseBody,
     validateRequest(ProductValidations.createProductValidationSchema),
-    productControllers.createProduct,
-)
+    productControllers.createProduct
+);
 
-router.get('/', productControllers.getAllProducts)
+router.get("/", productControllers.getAllProducts);
 
-router.get('/authors', productControllers.getAllAuthors)
+router.get("/authors", productControllers.getAllAuthors);
 
-router.get('/:productId', productControllers.getSingleProduct)
+router.get("/:productId", productControllers.getSingleProduct);
 
 router.patch(
-    '/:productId',
-    auth(USER_ROLE.admin),
-    upload.single('file'),
-    (req: Request, res: Response, next: NextFunction) => {
-        req.body = JSON.parse(req.body.data)
-        next()
-    },
+    "/:productId",
+    auth(UserRole.ADMIN),
+    multerUpload.single("image"),
+    parseBody,
     validateRequest(ProductValidations.updateProductValidationSchema),
-    productControllers.updateProduct,
-)
+    productControllers.updateProduct
+);
 
 router.delete(
-    '/:productId',
-    auth(USER_ROLE.admin),
-    productControllers.deleteProduct,
-)
+    "/:productId",
+    auth(UserRole.ADMIN),
+    productControllers.deleteProduct
+);
 
-export const ProductRoutes = router
+export const ProductRoutes = router;

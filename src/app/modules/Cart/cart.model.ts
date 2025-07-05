@@ -1,10 +1,10 @@
-import mongoose, { Schema, model } from 'mongoose'
-import { TCart, TCartItem } from './cart.interface'
+import mongoose, { Schema, model } from "mongoose";
+import { TCart, TCartItem } from "./cart.interface";
 
 const cartItemSchema = new Schema<TCartItem>({
     productId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: "Product",
         required: true,
     },
     title: { type: String, required: true },
@@ -13,13 +13,13 @@ const cartItemSchema = new Schema<TCartItem>({
     price: { type: Number, required: true },
     quantity: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
-})
+});
 
 const cartSchema = new Schema<TCart>(
     {
-        userId: {
+        user: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
+            ref: "User",
             required: true,
             unique: true,
         },
@@ -27,7 +27,7 @@ const cartSchema = new Schema<TCart>(
         totalItems: { type: Number, required: true, default: 0 },
         totalPrice: { type: Number, required: true, default: 0 },
     },
-    { timestamps: true },
-)
+    { timestamps: true }
+);
 
-export const Cart = model<TCart>('Cart', cartSchema)
+export const Cart = model<TCart>("Cart", cartSchema);

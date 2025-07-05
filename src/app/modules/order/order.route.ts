@@ -1,44 +1,44 @@
-import express from 'express'
-import { orderControllers } from './order.controller'
-import auth from '../../middlewares/auth'
-import { USER_ROLE } from '../User/user.constant'
-import validateRequest from '../../middlewares/validateRequest'
-import { orderValidationSchema, OrderValidations } from './order.validation'
+import express from "express";
+import { orderControllers } from "./order.controller";
+import { orderValidationSchema, OrderValidations } from "./order.validation";
+import auth from "../../middleware/auth";
+import { UserRole } from "../user/user.interface";
+import validateRequest from "../../middleware/validateRequest";
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', auth(USER_ROLE.admin), orderControllers.getAllOrders)
+router.get("/", auth(UserRole.ADMIN), orderControllers.getAllOrders);
 
-router.get('/:userId', auth(USER_ROLE.user), orderControllers.getUserOrders)
+router.get("/:userId", auth(UserRole.USER), orderControllers.getUserOrders);
 
 router.post(
-    '/',
-    auth(USER_ROLE.user),
+    "/",
+    auth(UserRole.USER),
     validateRequest(orderValidationSchema),
-    orderControllers.createOrder,
-)
+    orderControllers.createOrder
+);
 
 router.patch(
-    '/:orderId',
-    auth(USER_ROLE.admin),
-    orderControllers.updateOrderStatusByAdmin,
-)
+    "/:orderId",
+    auth(UserRole.ADMIN),
+    orderControllers.updateOrderStatusByAdmin
+);
 
 router.patch(
-    '/cancel/:orderId',
-    auth(USER_ROLE.user),
-    orderControllers.updateOrderStatusByUser,
-)
+    "/cancel/:orderId",
+    auth(UserRole.USER),
+    orderControllers.updateOrderStatusByUser
+);
 
-router.delete('/:orderId', auth(USER_ROLE.admin), orderControllers.deleteOrder)
+router.delete("/:orderId", auth(UserRole.ADMIN), orderControllers.deleteOrder);
 
 router.post(
-    '/create-payment-intent',
-    auth(USER_ROLE.user),
+    "/create-payment-intent",
+    auth(UserRole.USER),
     validateRequest(OrderValidations.createPaymentIntentValidationSchema),
-    orderControllers.createPaymentIntent,
-)
+    orderControllers.createPaymentIntent
+);
 
-router.get('/revenue', orderControllers.generateRevenueOfOrders)
+router.get("/revenue", orderControllers.generateRevenueOfOrders);
 
-export const OrderRoutes = router
+export const OrderRoutes = router;

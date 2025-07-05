@@ -1,23 +1,16 @@
-import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken'
+import jwt, { JwtPayload, Secret } from "jsonwebtoken";
+import { IJwtPayload } from "./auth.interface";
 
 export const createToken = (
-    jwtPayload: { userEmail: string; role: string },
-    secret: string,
-    expiresIn: string | number,
+    jwtPayload: IJwtPayload,
+    secret: Secret,
+    expiresIn: string
 ) => {
-    const options: SignOptions = {
-        expiresIn: expiresIn as
-            | number
-            | `${number}s`
-            | `${number}m`
-            | `${number}h`
-            | `${number}d`
-            | `${number}w`
-            | `${number}y`,
-    }
-    return jwt.sign(jwtPayload, secret, options)
-}
+    return jwt.sign(jwtPayload, secret, {
+        expiresIn: expiresIn as jwt.SignOptions["expiresIn"],
+    });
+};
 
-export const verifyToken = (token: string, secret: string) => {
-    return jwt.verify(token, secret) as JwtPayload
-}
+export const verifyToken = (token: string, secret: Secret) => {
+    return jwt.verify(token, secret) as JwtPayload;
+};

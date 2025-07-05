@@ -1,8 +1,8 @@
 export const productsSearchableFields = [
-    'title',
-    'author',
-    'category',
-    'minPrice',
-    'maxPrice',
-    'inStock',
-]
+    "title",
+    "author",
+    "category",
+    "minPrice",
+    "maxPrice",
+    "inStock",
+];

@@ -1,78 +1,70 @@
-import { model, Schema } from 'mongoose'
-import validator from 'validator'
-import { TProduct } from './product.interface'
+import { model, Schema } from "mongoose";
+import { IProduct } from "./product.interface";
 
-const productSchema = new Schema<TProduct>(
+const productSchema = new Schema<IProduct>(
     {
         title: {
             type: String,
-            required: [true, 'Title is required'],
+            required: [true, "Title is required"],
             validate: {
                 validator: (value: string) => {
-                    return /^[a-zA-Z0-9\s.:'-]+$/.test(value)
+                    return /^[a-zA-Z0-9\s.:'-]+$/.test(value);
                 },
                 message:
-                    '{VALUE} --- should only contain alphabetic characters, numbers and spaces',
+                    "{VALUE} --- should only contain alphabetic characters, numbers and spaces",
             },
         },
         author: {
             type: String,
-            required: [true, 'Author is required'],
+            required: [true, "Author is required"],
             validate: {
                 validator: (value: string) => {
-                    return /^[a-zA-ZÀ-ÿ\s,.'!-]+$/.test(value)
+                    return /^[a-zA-ZÀ-ÿ\s,.'!-]+$/.test(value);
                 },
                 message:
-                    '{VALUE} --- should only contain alphabetic characters and spaces',
+                    "{VALUE} --- should only contain alphabetic characters and spaces",
             },
         },
         price: {
             type: Number,
-            required: [true, 'Price of the Product (Book) is required'],
+            required: [true, "Price of the Product (Book) is required"],
             validate: {
                 validator: (value: number) => value > 0,
-                message: '{VALUE} --- should only contain positive number',
+                message: "{VALUE} --- should only contain positive number",
             },
         },
         category: {
             type: String,
             enum: [
-                'Fiction',
-                'Science',
-                'SelfDevelopment',
-                'Poetry',
-                'Religious',
+                "Fiction",
+                "Science",
+                "SelfDevelopment",
+                "Poetry",
+                "Religious",
             ],
-            required: [true, 'Category of the Product (Book) is required'],
-            validate: {
-                validator: (value: string) => {
-                    return validator.isAlpha(value)
-                },
-                message:
-                    '{VALUE} --- should only contain alphabetic characters',
-            },
+            required: [true, "Category of the Product (Book) is required"],
         },
         image: {
             type: String,
-            required: [true, 'Image is required'],
+            required: [true, "Image is required"],
         },
         description: {
             type: String,
-            required: [true, 'Description of the Product (Book) is required'],
+            required: [true, "Description of the Product (Book) is required"],
             validate: {
                 validator: (value: string) => {
-                    return /^[a-zA-ZÀ-ÿ0-9\s,.'’!-():-]+$/.test(value)
+                    return /^[a-zA-ZÀ-ÿ0-9\s,.'’!-():-]+$/.test(value);
                 },
                 message:
-                    '{VALUE} --- should only contain alphabets, numbers, spaces, commas, periods, exclamation points, and other common punctuation',
+                    "{VALUE} --- should only contain alphabets, numbers, spaces, commas, periods, exclamation points, and other common punctuation",
             },
         },
         quantity: {
             type: Number,
-            required: [true, 'Quantity of the Product (Book) is required'],
+            required: [true, "Quantity of the Product (Book) is required"],
             validate: {
                 validator: (value: number) => value >= 0,
-                message: '{VALUE} --- should only contain positive number',
+                message: "{VALUE} --- should only contain positive number",
             },
         },
         inStock: {
@@ -82,7 +74,7 @@ const productSchema = new Schema<TProduct>(
     },
     {
         timestamps: true,
-    },
-)
+    }
+);
 
-export const Product = model<TProduct>('Product', productSchema)
+export const Product = model<IProduct>("Product", productSchema);

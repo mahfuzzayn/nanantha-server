@@ -1,36 +1,61 @@
-import express, { Application, Request, Response } from 'express'
-import cors from 'cors'
-import path from 'path'
-import fs from 'fs'
-import router from './app/routes'
-import globalErrorHandler from './app/middlewares/globalErrorHandler'
-const app: Application = express()
+import cors from "cors";
+import express, { Application, NextFunction, Request, Response } from "express";
+import cookieParser from "cookie-parser";
+import os from "os";
+import { StatusCodes } from "http-status-codes";
+import router from "./app/routes";
+import globalErrorHandler from "./app/middleware/globalErrorHandler";
+import notFound from "./app/middleware/notFound";
+const app: Application = express();
 
-// parser
-app.use(express.json())
-app.use(cors({ origin: ['https://book-shop-b4a4v1-client.vercel.app'], credentials: true }))
-
-// application routes
-app.use('/api/v1', router)
-
-// homepage routes
-app.get('/', (req: Request, res: Response) => {
-    const filePath = path.join(__dirname, 'app/config', 'homepage.json')
-
-    fs.readFile(filePath, 'utf-8', (err, data) => {
-        if (err) {
-            return res.status(500).json({
-                message: 'Error loading homepage data',
-                success: false,
-                error: err.message,
-            })
-        }
-
-        const jsonData = JSON.parse(data)
-        res.status(200).json(jsonData)
+// Middlewares
+app.use(
+    cors({
+        origin: ["http://localhost:3000", "https://instructly.vercel.app"],
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        credentials: true,
     })
-})
+);
+app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use(globalErrorHandler)
+app.use("/api/v1", router);
 
-export default app
+// Home Route
+app.get("/", (req: Request, res: Response, next: NextFunction) => {
+    const currentDateTime = new Date().toISOString();
+    const clientIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+    const serverHostname = os.hostname();
+    const serverPlatform = os.platform();
+    const serverUptime = os.uptime();
+
+    res.status(StatusCodes.OK).json({
+        success: true,
+        message: "Welcome to Instructly API Server",
+        version: "1.0.0",
+        clientDetails: {
+            ipAddress: clientIp,
+            accessedAt: currentDateTime,
+        },
+        serverDetails: {
+            hostname: serverHostname,
+            platform: serverPlatform,
+            uptime: `${Math.floor(serverUptime / 60 / 60)} hours ${Math.floor(
+                (serverUptime / 60) % 60
+            )} minutes`,
+        },
+        developerContact: {
+            email: "mahfuzzayn8@gmail.com",
+            website: "https://mahfuzzayn.vercel.app",
+        },
+    });
+});
+
+// Global Error Handler
+app.use(globalErrorHandler);
+
+// Not Found Route
+app.use(notFound);
+
+export default app;

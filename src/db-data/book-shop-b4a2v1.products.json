@@ -1,0 +1,209 @@
+[{
+  "_id": {
+    "$oid": "6741d53227ae412e801c36c2"
+  },
+  "title": "Ikigai: The Japanese Secret to a Long and Happy Life",
+  "author": "Héctor García",
+  "price": 15,
+  "category": "SelfDevelopment",
+  "description": "Ikigai is a Japanese concept that means 'a reason for being'. This book explores how this philosophy contributes to happiness and longevity, focusing on the habits and mindsets of the world's longest-living people, especially those in Okinawa, Japan.",
+  "quantity": 25,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T13:14:26.316Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-24T11:31:01.506Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6741d53c27ae412e801c36c4"
+  },
+  "title": "Rich Dad Poor Dad",
+  "author": "Robert T. Kiyosaki",
+  "price": 14.99,
+  "category": "SelfDevelopment",
+  "description": "This book contrasts the financial mindsets and lessons of two fathers: one wealthy (the 'rich dad') and the other not-so-wealthy (the 'poor dad'). It encourages financial education and advocates for entrepreneurship and investing in assets rather than relying on a traditional job.",
+  "quantity": 150,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T13:14:36.232Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-23T13:14:36.232Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6741d54f27ae412e801c36c8"
+  },
+  "title": "1984",
+  "author": "George Orwell",
+  "price": 9.99,
+  "category": "Fiction",
+  "description": "A dystopian novel set in a totalitarian society where the government watches and controls every aspect of life. Through the story of Winston Smith, George Orwell explores themes of surveillance, government propaganda, and the loss of individual freedoms.",
+  "quantity": 200,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T13:14:55.174Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-23T13:14:55.174Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6741d5eab60b89bc50dd9f10"
+  },
+  "title": "Sapiens: A Brief History of Humankind",
+  "author": "Yuval Noah Harari",
+  "price": 19,
+  "category": "Science",
+  "description": "This book provides a sweeping history of humankind, from the emergence of Homo sapiens to the modern age, covering cultural, scientific, and technological developments. It explores how biology, culture, and history have shaped humanity’s trajectory.",
+  "quantity": 200,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T13:17:30.890Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-23T13:17:30.890Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6741d5ffb60b89bc50dd9f12"
+  },
+  "title": "The Four Agreements",
+  "author": "Don Miguel Ruiz",
+  "price": 12,
+  "category": "SelfDevelopment",
+  "description": "A guide to personal freedom, The Four Agreements outlines four simple, yet powerful principles to practice in order to create love and happiness in your life. These agreements challenge beliefs and practices that limit personal growth.",
+  "quantity": 18,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T13:17:51.951Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-24T11:30:17.283Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6741d609b60b89bc50dd9f14"
+  },
+  "title": "The Catcher in the Rye",
+  "author": "J.D. Salinger",
+  "price": 11,
+  "category": "Fiction",
+  "description": "This iconic novel follows Holden Caulfield, a teenage boy who has been expelled from a prestigious school. The book explores themes of alienation, identity, and the transition from adolescence to adulthood.",
+  "quantity": 150,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T13:18:01.473Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-23T13:18:01.473Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6741d61fb60b89bc50dd9f18"
+  },
+  "title": "Atomic Habits",
+  "author": "James Clear",
+  "price": 15,
+  "category": "SelfDevelopment",
+  "description": "A comprehensive guide on how tiny changes in habits can lead to significant personal transformation. James Clear explains the science behind habit formation and provides actionable advice for developing lasting habits.",
+  "quantity": 180,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T13:18:23.146Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-23T13:18:23.146Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6741d7cdb60b89bc50dd9f24"
+  },
+  "title": "The Man Who Broke Capitalism",
+  "author": "Morgan Housell",
+  "price": 32,
+  "category": "SelfDevelopment",
+  "description": "A work examining the downfall of capitalist systems and their role in economic inequality. Housel reflects on the failures of modern capitalism, offering thoughts on what reforms might be needed for a more balanced and sustainable economic structure. The book includes insights into the moral implications of unchecked capitalism and its effects on global economies.",
+  "quantity": 115,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T13:25:33.369Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-23T15:52:11.718Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6741e1400c8fb285458099df"
+  },
+  "title": "The Psychology of Money",
+  "author": "Morgan Housell",
+  "price": 15,
+  "category": "SelfDevelopment",
+  "description": "This book explores the psychological barriers people face when managing money, including cognitive biases and societal pressures that shape financial decisions. It presents practical advice to reframe your relationship with wealth, discussing concepts like delayed gratification, the influence of status, and the emotional attachment to financial success.",
+  "quantity": 290,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T14:05:52.980Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-23T14:05:52.980Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67430e8e28d7389f741ac084"
+  },
+  "title": "The Great Gatsby",
+  "author": "F. Scott Fitzgerald",
+  "price": 10,
+  "category": "Fiction",
+  "description": "A story about the American dream.",
+  "quantity": 98,
+  "inStock": false,
+  "createdAt": {
+    "$date": "2024-11-24T11:31:26.906Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-24T12:00:21.709Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674333cf4f9e8448865696c4"
+  },
+  "title": "The Great Gatsby",
+  "author": "F. Scott Fitzgerald",
+  "price": 10,
+  "category": "Fiction",
+  "description": "A story about the American dream.",
+  "quantity": 100,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-24T14:10:23.240Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-24T14:10:23.240Z"
+  },
+  "__v": 0
+}]

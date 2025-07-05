@@ -1,0 +1,180 @@
+[{
+  "_id": {
+    "$oid": "679b5e8894205c5b1fc4ad2f"
+  },
+  "userId": {
+    "$oid": "67968cb6d025e5bb6255ceab"
+  },
+  "items": [
+    {
+      "productId": {
+        "$oid": "6741d609b60b89bc50dd9f14"
+      },
+      "title": "The Catcher in the Rye",
+      "author": "J.D. Salinger",
+      "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738048935/The%20Catcher%20in%20the%20Rye-J.D.%20Salinger.jpg",
+      "price": 12.99,
+      "quantity": 3,
+      "totalPrice": 38.97,
+      "_id": "679b5e7794205c5b1fc4acea"
+    },
+    {
+      "productId": {
+        "$oid": "6741d53227ae412e801c36c2"
+      },
+      "title": "Ikigai: The Japanese Secret to a Long and Happy Life",
+      "author": "Héctor García",
+      "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738049073/Ikigai:%20The%20Japanese%20Secret%20to%20a%20Long%20and%20Happy%20Life-H%C3%A9ctor%20Garc%C3%ADa.jpg",
+      "price": 15,
+      "quantity": 4,
+      "totalPrice": 60,
+      "_id": "679b5e7b94205c5b1fc4ad03"
+    }
+  ],
+  "total": 98.97,
+  "status": "pending",
+  "transactionId": "pi_3QmvfABAz5pNWXmC0ZfNbQo9",
+  "createdAt": "2025-01-30T11:12:07.847Z",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "679b6b15252200c342bd6b62"
+  },
+  "userId": {
+    "$oid": "67968cb6d025e5bb6255ceab"
+  },
+  "items": [
+    {
+      "productId": {
+        "$oid": "6741d53227ae412e801c36c2"
+      },
+      "title": "Ikigai: The Japanese Secret to a Long and Happy Life",
+      "author": "Héctor García",
+      "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738049073/Ikigai:%20The%20Japanese%20Secret%20to%20a%20Long%20and%20Happy%20Life-H%C3%A9ctor%20Garc%C3%ADa.jpg",
+      "price": 15,
+      "quantity": 1,
+      "totalPrice": 15,
+      "_id": "679b6b0c252200c342bd6b57"
+    }
+  ],
+  "total": 15,
+  "status": "pending",
+  "transactionId": "pi_3QmwV0BAz5pNWXmC0PnBOODD",
+  "createdAt": "2025-01-30T12:05:40.994Z",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "679b8b3aa1cd7d3f5a04275f"
+  },
+  "userId": {
+    "$oid": "6797a6c6a62f7f9fb3c74def"
+  },
+  "items": [
+    {
+      "productId": {
+        "$oid": "6741d53227ae412e801c36c2"
+      },
+      "title": "Ikigai: The Japanese Secret to a Long and Happy Life",
+      "author": "Héctor García",
+      "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738049073/Ikigai:%20The%20Japanese%20Secret%20to%20a%20Long%20and%20Happy%20Life-H%C3%A9ctor%20Garc%C3%ADa.jpg",
+      "price": 15,
+      "quantity": 3,
+      "totalPrice": 45,
+      "_id": "679b8b2ca1cd7d3f5a04272e"
+    },
+    {
+      "productId": {
+        "$oid": "6741d609b60b89bc50dd9f14"
+      },
+      "title": "The Catcher in the Rye",
+      "author": "J.D. Salinger",
+      "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738048935/The%20Catcher%20in%20the%20Rye-J.D.%20Salinger.jpg",
+      "price": 12.99,
+      "quantity": 2,
+      "totalPrice": 25.98,
+      "_id": "679b8b2ea1cd7d3f5a042737"
+    }
+  ],
+  "total": 70.98,
+  "status": "pending",
+  "transactionId": "pi_3QmydiBAz5pNWXmC1NjYAUr1",
+  "createdAt": "2025-01-30T14:22:49.833Z",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "679b8b74a1cd7d3f5a042853"
+  },
+  "userId": {
+    "$oid": "6797a6c6a62f7f9fb3c74def"
+  },
+  "items": [
+    {
+      "productId": {
+        "$oid": "6741d54f27ae412e801c36c8"
+      },
+      "title": "1984",
+      "author": "George Orwell",
+      "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738048701/1984-George%20Orwell.jpg",
+      "price": 9.99,
+      "quantity": 3,
+      "totalPrice": 29.97,
+      "_id": "679b8b50a1cd7d3f5a042770"
+    },
+    {
+      "productId": {
+        "$oid": "6741d609b60b89bc50dd9f14"
+      },
+      "title": "The Catcher in the Rye",
+      "author": "J.D. Salinger",
+      "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738048935/The%20Catcher%20in%20the%20Rye-J.D.%20Salinger.jpg",
+      "price": 12.99,
+      "quantity": 4,
+      "totalPrice": 51.96,
+      "_id": "679b8b52a1cd7d3f5a042779"
+    },
+    {
+      "productId": {
+        "$oid": "67430e8e28d7389f741ac084"
+      },
+      "title": "The Great Gatsby",
+      "author": "F. Scott Fitzgerald",
+      "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738049018/The%20Great%20Gatsby-F.%20Scott%20Fitzgerald.jpg",
+      "price": 10,
+      "quantity": 3,
+      "totalPrice": 30,
+      "_id": "679b8b54a1cd7d3f5a042784"
+    },
+    {
+      "productId": {
+        "$oid": "6741d53c27ae412e801c36c4"
+      },
+      "title": "Rich Dad Poor Dad",
+      "author": "Robert T. Kiyosaki",
+      "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738057840/Rich%20Dad%20Poor%20Dad-Robert%20T.%20Kiyosaki.jpg",
+      "price": 14.99,
+      "quantity": 2,
+      "totalPrice": 29.98,
+      "_id": "679b8b57a1cd7d3f5a042791"
+    },
+    {
+      "productId": {
+        "$oid": "6741d61fb60b89bc50dd9f18"
+      },
+      "title": "Atomic Habits",
+      "author": "James Clear",
+      "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738048775/Atomic%20Habits-James%20Clear.jpg",
+      "price": 15,
+      "quantity": 3,
+      "totalPrice": 45,
+      "_id": "679b8b59a1cd7d3f5a0427a0"
+    }
+  ],
+  "total": 186.91,
+  "status": "pending",
+  "transactionId": "pi_3QmyedBAz5pNWXmC1stH2fq1",
+  "createdAt": "2025-01-30T14:23:48.392Z",
+  "__v": 0
+}]

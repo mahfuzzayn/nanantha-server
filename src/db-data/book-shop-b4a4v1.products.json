@@ -1,0 +1,240 @@
+[{
+  "_id": {
+    "$oid": "6741d53227ae412e801c36c2"
+  },
+  "title": "Ikigai: The Japanese Secret to a Long and Happy Life",
+  "author": "Héctor García",
+  "price": 15,
+  "category": "SelfDevelopment",
+  "description": "Ikigai is a Japanese concept that means 'a reason for being'. This book explores how this philosophy contributes to happiness and longevity, focusing on the habits and mindsets of the world's longest-living people, especially those in Okinawa, Japan.",
+  "quantity": 8,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T13:14:26.316Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-08T19:42:19.661Z"
+  },
+  "__v": 0,
+  "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738049073/Ikigai:%20The%20Japanese%20Secret%20to%20a%20Long%20and%20Happy%20Life-H%C3%A9ctor%20Garc%C3%ADa.jpg"
+},
+{
+  "_id": {
+    "$oid": "6741d5ffb60b89bc50dd9f12"
+  },
+  "title": "The Four Agreements",
+  "author": "Don Miguel Ruiz",
+  "price": 12,
+  "category": "SelfDevelopment",
+  "description": "A guide to personal freedom, The Four Agreements outlines four simple, yet powerful principles to practice in order to create love and happiness in your life. These agreements challenge beliefs and practices that limit personal growth.",
+  "quantity": 0,
+  "inStock": false,
+  "createdAt": {
+    "$date": "2024-11-23T13:17:51.951Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-08T12:06:00.518Z"
+  },
+  "__v": 0,
+  "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738049107/The%20Four%20Agreements-Don%20Miguel%20Ruiz.jpg"
+},
+{
+  "_id": {
+    "$oid": "6741d7cdb60b89bc50dd9f24"
+  },
+  "title": "The Man Who Broke Capitalism",
+  "author": "Morgan Housell",
+  "price": 32,
+  "category": "SelfDevelopment",
+  "description": "A work examining the downfall of capitalist systems and their role in economic inequality. Housel reflects on the failures of modern capitalism, offering thoughts on what reforms might be needed for a more balanced and sustainable economic structure. The book includes insights into the moral implications of unchecked capitalism and its effects on global economies.",
+  "quantity": 2,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T13:25:33.369Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-03T09:19:39.444Z"
+  },
+  "__v": 0,
+  "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738048973/The%20Man%20Who%20Broke%20Capitalism-Morgan%20Housell.jpg"
+},
+{
+  "_id": {
+    "$oid": "6741e1400c8fb285458099df"
+  },
+  "title": "The Psychology of Money",
+  "author": "Morgan Housell",
+  "price": 30,
+  "category": "SelfDevelopment",
+  "description": "This book explores the psychological barriers people face when managing money, including cognitive biases and societal pressures that shape financial decisions. It presents practical advice to reframe your relationship with wealth, discussing concepts like delayed gratification, the influence of status, and the emotional attachment to financial success.",
+  "quantity": 2,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T14:05:52.980Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-08T12:06:10.724Z"
+  },
+  "__v": 0,
+  "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738048555/The%20Psychology%20of%20Money-Morgan%20Housell.png"
+},
+{
+  "_id": {
+    "$oid": "6741d54f27ae412e801c36c8"
+  },
+  "title": "1984",
+  "author": "George Orwell",
+  "price": 9.99,
+  "category": "SelfDevelopment",
+  "description": "A dystopian novel set in a totalitarian society where the government watches and controls every aspect of life. Through the story of Winston Smith, George Orwell explores themes of surveillance, government propaganda, and the loss of individual freedoms.",
+  "quantity": 38,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T13:14:55.174Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-09T07:24:36.794Z"
+  },
+  "__v": 0,
+  "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738479896/1984-George%20Orwell.jpg"
+},
+{
+  "_id": {
+    "$oid": "6741d5eab60b89bc50dd9f10"
+  },
+  "title": "Sapiens: A Brief History of Humankind",
+  "author": "Yuval Noah Harari",
+  "price": 19,
+  "category": "Science",
+  "description": "This book provides a sweeping history of humankind, from the emergence of Homo sapiens to the modern age, covering cultural, scientific, and technological developments. It explores how biology, culture, and history have shaped humanity’s trajectory.",
+  "quantity": 2,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T13:17:30.890Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-03T09:19:39.326Z"
+  },
+  "__v": 0,
+  "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738048612/Sapiens:%20A%20Brief%20History%20of%20Humankind-Yuval%20Noah%20Harari.jpg"
+},
+{
+  "_id": {
+    "$oid": "6741d53c27ae412e801c36c4"
+  },
+  "title": "Rich Dad Poor Dad",
+  "author": "Robert T. Kiyosaki",
+  "price": 14.99,
+  "category": "SelfDevelopment",
+  "description": "This book contrasts the financial mindsets and lessons of two fathers: one wealthy (the 'rich dad') and the other not-so-wealthy (the 'poor dad'). It encourages financial education and advocates for entrepreneurship and investing in assets rather than relying on a traditional job.",
+  "quantity": 1,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T13:14:36.232Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-30T14:23:48.831Z"
+  },
+  "__v": 0,
+  "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738057840/Rich%20Dad%20Poor%20Dad-Robert%20T.%20Kiyosaki.jpg"
+},
+{
+  "_id": {
+    "$oid": "6741d609b60b89bc50dd9f14"
+  },
+  "title": "The Catcher in the Rye",
+  "author": "J.D. Salinger",
+  "price": 12.99,
+  "category": "Fiction",
+  "description": "This iconic novel follows Holden Caulfield, a teenage boy who has been expelled from a prestigious school. The book explores themes of alienation, identity, and the transition from adolescence to adulthood.",
+  "quantity": 0,
+  "inStock": false,
+  "createdAt": {
+    "$date": "2024-11-23T13:18:01.473Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-03T13:35:46.811Z"
+  },
+  "__v": 0,
+  "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738048935/The%20Catcher%20in%20the%20Rye-J.D.%20Salinger.jpg"
+},
+{
+  "_id": {
+    "$oid": "6741d61fb60b89bc50dd9f18"
+  },
+  "title": "Atomic Habits",
+  "author": "James Clear",
+  "price": 15,
+  "category": "SelfDevelopment",
+  "description": "A comprehensive guide on how tiny changes in habits can lead to significant personal transformation. James Clear explains the science behind habit formation and provides actionable advice for developing lasting habits.",
+  "quantity": 3,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T13:18:23.146Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-04T15:22:52.764Z"
+  },
+  "__v": 0,
+  "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738048775/Atomic%20Habits-James%20Clear.jpg"
+},
+{
+  "_id": {
+    "$oid": "67430e8e28d7389f741ac084"
+  },
+  "title": "The Great Gatsby",
+  "author": "F. Scott Fitzgerald",
+  "price": 10,
+  "category": "Fiction",
+  "description": "A story about the American dream.",
+  "quantity": 1,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-24T11:31:26.906Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-30T14:23:48.725Z"
+  },
+  "__v": 0,
+  "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738049018/The%20Great%20Gatsby-F.%20Scott%20Fitzgerald.jpg"
+},
+{
+  "_id": {
+    "$oid": "67a7c9d3f9f920ba4afcde54"
+  },
+  "title": "The Psychology of Money",
+  "author": "Morgan Housell",
+  "price": 30,
+  "category": "SelfDevelopment",
+  "description": "This book explores the psychological barriers people face when managing money, including cognitive biases and societal pressures that shape financial decisions. It presents practical advice to reframe your relationship with wealth, discussing concepts like delayed gratification, the influence of status, and the emotional attachment to financial success.",
+  "quantity": 2,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T14:05:52.980Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-08T12:06:10.724Z"
+  },
+  "__v": 0,
+  "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738048555/The%20Psychology%20of%20Money-Morgan%20Housell.png"
+},
+{
+  "_id": {
+    "$oid": "67a7c9d6f9f920ba4afcde55"
+  },
+  "title": "The Man Who Broke Capitalism",
+  "author": "Morgan Housell",
+  "price": 32,
+  "category": "SelfDevelopment",
+  "description": "A work examining the downfall of capitalist systems and their role in economic inequality. Housel reflects on the failures of modern capitalism, offering thoughts on what reforms might be needed for a more balanced and sustainable economic structure. The book includes insights into the moral implications of unchecked capitalism and its effects on global economies.",
+  "quantity": 2,
+  "inStock": true,
+  "createdAt": {
+    "$date": "2024-11-23T13:25:33.369Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-03T09:19:39.444Z"
+  },
+  "__v": 0,
+  "image": "https://res.cloudinary.com/dvd0x20di/image/upload/v1738048973/The%20Man%20Who%20Broke%20Capitalism-Morgan%20Housell.jpg"
+}]
