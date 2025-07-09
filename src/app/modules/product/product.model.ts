@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import { productCategories } from "./product.const";
 import { IProduct } from "./product.interface";
 
 const productSchema = new Schema<IProduct>(
@@ -35,14 +36,14 @@ const productSchema = new Schema<IProduct>(
         },
         category: {
             type: String,
-            enum: [
-                "Fiction",
-                "Science",
-                "SelfDevelopment",
-                "Poetry",
-                "Religious",
-            ],
+            enum: productCategories,
             required: [true, "Category of the Product (Book) is required"],
+        },
+        rating: { type: Number, default: 0 },
+        reviews: {
+            type: [Schema.Types.ObjectId],
+            ref: "Review",
+            default: [],
         },
         image: {
             type: String,
@@ -66,6 +67,11 @@ const productSchema = new Schema<IProduct>(
                 validator: (value: number) => value >= 0,
                 message: "{VALUE} --- should only contain positive number",
             },
+        },
+        status: {
+            type: String,
+            enum: ["active", "discontinued"],
+            default: "active",
         },
         inStock: {
             type: Boolean,

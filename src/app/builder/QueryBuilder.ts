@@ -40,8 +40,7 @@ class QueryBuilder<T> {
 
     sort() {
         const sort =
-            (this?.query?.sort as string)?.split(",")?.join(" ") ||
-            "createdAt";
+            (this?.query?.sort as string)?.split(",")?.join(" ") || "createdAt";
         this.modelQuery = this.modelQuery.sort(sort as string);
 
         return this;
@@ -64,7 +63,7 @@ class QueryBuilder<T> {
         this.modelQuery = this.modelQuery.select(fields);
         return this;
     }
-    
+
     async countTotal() {
         const totalQueries = this.modelQuery.getFilter();
         const total = await this.modelQuery.model.countDocuments(totalQueries);
@@ -87,7 +86,7 @@ class QueryBuilder<T> {
 
         if (minPrice !== undefined || maxPrice !== undefined) {
             this.modelQuery = this.modelQuery.find({
-                hourlyRate: priceFilter,
+                price: priceFilter,
             } as FilterQuery<T>);
         }
 

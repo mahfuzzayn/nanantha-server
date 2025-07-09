@@ -1,8 +1,16 @@
-export const productsSearchableFields = [
+export const productSearchableFields = [
     "title",
     "author",
     "category",
-    "minPrice",
-    "maxPrice",
+    "price",
+    "quantity",
     "inStock",
+];
+
+export const productCategories = [
+    "Fiction",
+    "Science",
+    "SelfDevelopment",
+    "Poetry",
+    "Religious",
 ];

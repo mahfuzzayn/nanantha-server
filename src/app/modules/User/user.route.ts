@@ -33,8 +33,8 @@ router.patch(
     UserControllers.updateUser
 );
 
-router.post(
-    "/change-status/:id",
+router.patch(
+    "/change-status/:userId",
     auth(UserRole.ADMIN),
     validateRequest(UserValidations.changeStatusValidationSchema),
     UserControllers.changeStatus

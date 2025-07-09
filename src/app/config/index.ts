@@ -7,6 +7,8 @@ export default {
     NODE_ENV: process.env.NODE_ENV,
     port: process.env.PORT,
     db_url: process.env.DB_URL,
+    base_url: process.env.BASE_URL,
+    client_url: process.env.CLIENT_URL,
     bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
     jwt_access_secret: process.env.JWT_ACCESS_SECRET,
     jwt_access_expires_in: process.env.JWT_ACCESS_EXPIRES_IN,
@@ -25,4 +27,5 @@ export default {
     sender_email: process.env.SENDER_EMAIL,
     sender_app_password: process.env.SENDER_APP_PASS,
     stripe_secret_key: process.env.STRIPE_SECRET_KEY,
+    mollie_client_api: process.env.MOLLIE_CLIENT_API,
 };

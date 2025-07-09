@@ -23,9 +23,18 @@ const userSchema = new Schema<IUser, UserModel>(
         passwordChangedAt: {
             type: Date,
         },
+        location: {
+            type: String,
+            default: null,
+        },
         profileUrl: {
             type: String,
             default: null,
+        },
+        reviewsGiven: {
+            type: [Schema.Types.ObjectId],
+            ref: "Review",
+            default: [],
         },
         role: {
             type: String,

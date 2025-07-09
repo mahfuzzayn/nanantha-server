@@ -8,9 +8,18 @@ import AppError from "../../errors/appError";
 import { User } from "./user.model";
 import { IImageFile } from "../../interface/IImageFile";
 import { IJwtPayload } from "../auth/auth.interface";
+import { AuthServices } from "../auth/auth.service";
+import { Cart } from "../cart/cart.model";
+import mongoose from "mongoose";
 
-const getAllUsersFromDB = async (query: Record<string, unknown>) => {
-    const usersQuery = new QueryBuilder(User.find({ role: "user" }), query)
+const getAllUsersFromDB = async (
+    authUser: IJwtPayload,
+    query: Record<string, unknown>
+) => {
+    const usersQuery = new QueryBuilder(
+        User.find({ _id: { $ne: authUser?.userId } }),
+        query
+    )
         .search(userSearchableFields)
         .filter()
         .sort()
@@ -30,8 +39,8 @@ const getAllUsersFromDB = async (query: Record<string, unknown>) => {
     };
 };
 
-const getMeFromDB = async (id: string) => {
-    const result = await User.findById(id);
+const getMeFromDB = async (authUser: IJwtPayload) => {
+    const result = await User.findById(authUser.userId);
 
     if (!result) {
         throw new AppError(StatusCodes.BAD_REQUEST, "Failed to retrieve user");
@@ -41,17 +50,46 @@ const getMeFromDB = async (id: string) => {
 };
 
 const registerUserIntoDB = async (payload: IUser) => {
-    const userData: Partial<IUser> = { ...payload };
+    const session = await mongoose.startSession();
 
-    userData.role = UserRole.USER;
+    try {
+        session.startTransaction();
 
-    const newUser = await User.create(userData);
+        const userData: Partial<IUser> = { ...payload };
 
-    if (!newUser) {
-        throw new AppError(StatusCodes.BAD_REQUEST, "Failed to create user");
+        userData.role = UserRole.USER;
+
+        const newUser = new User(userData);
+        await newUser.save({ session });
+
+        if (!newUser) {
+            throw new AppError(
+                StatusCodes.BAD_REQUEST,
+                "Failed to create user"
+            );
+        }
+
+        if (newUser?.role === "user") {
+            const cart = new Cart({
+                user: newUser?._id,
+            });
+
+            await cart.save({ session });
+        }
+
+        await session.commitTransaction();
+
+        return await AuthServices.loginUser({
+            email: userData?.email as string,
+            password: userData?.password as string,
+        });
+    } catch (error) {
+        await session.abortTransaction();
+
+        console.log(error);
+    } finally {
+        await session.endSession();
     }
-
-    return newUser;
 };
 
 const updateUserIntoDB = async (
@@ -94,6 +132,10 @@ const updateUserIntoDB = async (
 
     if (payload?.name) {
         updateData.name = payload.name;
+    }
+
+    if (payload?.location && payload?.location !== user?.location) {
+        updateData.location = payload.location;
     }
 
     if (Object.keys(updateData).length === 0) {

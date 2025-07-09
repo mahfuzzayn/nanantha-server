@@ -1,7 +1,7 @@
 import mongoose, { Schema, model } from "mongoose";
-import { TCart, TCartItem } from "./cart.interface";
+import { ICart, ICartItem } from "./cart.interface";
 
-const cartItemSchema = new Schema<TCartItem>({
+const cartItemSchema = new Schema<ICartItem>({
     productId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
@@ -15,19 +15,22 @@ const cartItemSchema = new Schema<TCartItem>({
     totalPrice: { type: Number, required: true },
 });
 
-const cartSchema = new Schema<TCart>(
+const cartSchema = new Schema<ICart>(
     {
         user: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: "User",
             required: true,
             unique: true,
         },
-        items: [cartItemSchema],
+        items: {
+            type: [cartItemSchema],
+            default: [],
+        },
         totalItems: { type: Number, required: true, default: 0 },
         totalPrice: { type: Number, required: true, default: 0 },
     },
     { timestamps: true }
 );
 
-export const Cart = model<TCart>("Cart", cartSchema);
+export const Cart = model<ICart>("Cart", cartSchema);

@@ -1,44 +1,44 @@
 import express from "express";
-import { orderControllers } from "./order.controller";
-import { orderValidationSchema, OrderValidations } from "./order.validation";
+import { OrderController } from "./order.controller";
+import { OrderValidations } from "./order.validation";
 import auth from "../../middleware/auth";
 import { UserRole } from "../user/user.interface";
 import validateRequest from "../../middleware/validateRequest";
 
 const router = express.Router();
 
-router.get("/", auth(UserRole.ADMIN), orderControllers.getAllOrders);
+router.get("/", auth(UserRole.ADMIN), OrderController.getAllOrders);
 
-router.get("/:userId", auth(UserRole.USER), orderControllers.getUserOrders);
+router.post("/create-order", auth(UserRole.USER), OrderController.createOrder);
 
-router.post(
-    "/",
+router.get("/validate", OrderController.validatePayment);
+
+router.get("/me", auth(UserRole.USER), OrderController.getMyOrders);
+
+
+router.get(
+    "/payments/:paymentId",
     auth(UserRole.USER),
-    validateRequest(orderValidationSchema),
-    orderControllers.createOrder
-);
-
-router.patch(
-    "/:orderId",
-    auth(UserRole.ADMIN),
-    orderControllers.updateOrderStatusByAdmin
+    OrderController.getOrderByPaymentId
 );
 
 router.patch(
     "/cancel/:orderId",
     auth(UserRole.USER),
-    orderControllers.updateOrderStatusByUser
+    OrderController.updateOrderStatusByUser
 );
 
-router.delete("/:orderId", auth(UserRole.ADMIN), orderControllers.deleteOrder);
+router.get("/:orderId", auth(UserRole.USER, UserRole.ADMIN), OrderController.getSingleOrder);
 
-router.post(
-    "/create-payment-intent",
-    auth(UserRole.USER),
-    validateRequest(OrderValidations.createPaymentIntentValidationSchema),
-    orderControllers.createPaymentIntent
+router.patch(
+    "/:orderId",
+    auth(UserRole.ADMIN),
+    validateRequest(OrderValidations.updateOrderStatusByAdminValidationSchema),
+    OrderController.updateOrderStatusByAdmin
 );
 
-router.get("/revenue", orderControllers.generateRevenueOfOrders);
+router.delete("/:orderId", auth(UserRole.ADMIN), OrderController.deleteOrder);
+
+router.get("/revenue", OrderController.generateRevenueOfOrders);
 
 export const OrderRoutes = router;

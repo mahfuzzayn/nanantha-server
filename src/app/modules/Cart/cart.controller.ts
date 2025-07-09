@@ -15,6 +15,17 @@ const getAllCarts = catchAsync(async (req, res) => {
     });
 });
 
+const getMyCart = catchAsync(async (req, res) => {
+    const result = await CartServices.getMyCartFromDB(req.user as IJwtPayload);
+
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: "Cart retrieved successfully",
+        data: result,
+    });
+});
+
 const getSingleCart = catchAsync(async (req, res) => {
     const { userId } = req.params;
 
@@ -29,7 +40,10 @@ const getSingleCart = catchAsync(async (req, res) => {
 });
 
 const addItem = catchAsync(async (req, res) => {
-    const result = await CartServices.addItemIntoDB(req.body, req.user as IJwtPayload);
+    const result = await CartServices.addItemIntoDB(
+        req.body,
+        req.user as IJwtPayload
+    );
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,
@@ -44,7 +58,7 @@ const removeItem = catchAsync(async (req, res) => {
 
     const result = await CartServices.removeItemFromDB(
         productId,
-        req.user as IJwtPayload,
+        req.user as IJwtPayload
     );
 
     sendResponse(res, {
@@ -85,6 +99,7 @@ const clearCart = catchAsync(async (req, res) => {
 
 export const cartControllers = {
     getAllCarts,
+    getMyCart,
     getSingleCart,
     addItem,
     removeItem,

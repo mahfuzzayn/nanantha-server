@@ -2,12 +2,10 @@
 import { Request, Response } from "express";
 import { OrderServices } from "./order.service";
 import sendResponse from "../../utils/sendResponse";
-import Stripe from "stripe";
 import catchAsync from "../../utils/catchAsync";
 import { StatusCodes } from "http-status-codes";
 import config from "../../config";
-
-const stripe = new Stripe(config.stripe_secret_key as string);
+import { IJwtPayload } from "../auth/auth.interface";
 
 const getAllOrders = catchAsync(async (req, res) => {
     const result = await OrderServices.getAllOrdersFromDB(req.query);
@@ -21,12 +19,33 @@ const getAllOrders = catchAsync(async (req, res) => {
     });
 });
 
-const getUserOrders = catchAsync(async (req, res) => {
+const getSingleOrder = catchAsync(async (req, res) => {
+    const { orderId } = req.params;
+    const result = await OrderServices.getSingleOrderFromDB(orderId);
+
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: "Order retrieved successfully",
+        data: result,
+    });
+});
+
+const getOrderByPaymentId = catchAsync(async (req, res) => {
+    const { paymentId } = req.params;
+    const result = await OrderServices.getOrderByPaymentIdFromDB(paymentId);
+
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: "Order retrieved successfully",
+        data: result,
+    });
+});
+
+const getMyOrders = catchAsync(async (req, res) => {
     const { userId } = req.params;
-    const result = await OrderServices.getSingleUserOrdersFromDB(
-        userId,
-        req.query
-    );
+    const result = await OrderServices.getMyOrdersFromDB(userId, req.query);
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,
@@ -38,7 +57,9 @@ const getUserOrders = catchAsync(async (req, res) => {
 });
 
 const createOrder = catchAsync(async (req, res) => {
-    const result = await OrderServices.createOrderIntoDB(req.body);
+    const result = await OrderServices.createOrderIntoDB(
+        req.user as IJwtPayload
+    );
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,
@@ -46,6 +67,23 @@ const createOrder = catchAsync(async (req, res) => {
         message: "Order created successfully",
         data: result,
     });
+});
+
+const validatePayment = catchAsync(async (req: Request, res: Response) => {
+    const { mollieId } = req.query;
+    const result = await OrderServices.validateOrderIntoDB(mollieId as string);
+
+    if (result.success) {
+        res.redirect(
+            301,
+            `${config.client_url}/payment-success?paymentId=${result.paymentId}`
+        );
+    } else {
+        res.redirect(
+            301,
+            `${config.client_url}/payment-failed?paymentId=${result.paymentId}`
+        );
+    }
 });
 
 const updateOrderStatusByUser = catchAsync(async (req, res) => {
@@ -91,25 +129,6 @@ const deleteOrder = catchAsync(async (req, res) => {
     });
 });
 
-const createPaymentIntent = catchAsync(async (req, res) => {
-    const { amount, currency } = req.body;
-
-    const paymentIntent = await stripe.paymentIntents.create({
-        amount: Math.round(amount * 100),
-        currency: currency || "usd",
-        payment_method_types: ["card"],
-    });
-
-    const result = { clientSecret: paymentIntent.client_secret };
-
-    sendResponse(res, {
-        statusCode: StatusCodes.OK,
-        success: true,
-        message: "Payment intent created successfully",
-        data: result,
-    });
-});
-
 const generateRevenueOfOrders = async (req: Request, res: Response) => {
     try {
         const result = await OrderServices.generateOrdersRevenueFromDB();
@@ -132,13 +151,15 @@ const generateRevenueOfOrders = async (req: Request, res: Response) => {
     }
 };
 
-export const orderControllers = {
+export const OrderController = {
     getAllOrders,
-    getUserOrders,
+    getSingleOrder,
+    getOrderByPaymentId,
+    getMyOrders,
     createOrder,
+    validatePayment,
     updateOrderStatusByUser,
     updateOrderStatusByAdmin,
     deleteOrder,
-    createPaymentIntent,
     generateRevenueOfOrders,
 };

@@ -1,21 +1,37 @@
 import { Cart } from "./cart.model";
-import { TCartItem } from "./cart.interface";
+import { ICartItem } from "./cart.interface";
 import { Product } from "../product/product.model";
 import { IJwtPayload } from "../auth/auth.interface";
 
 const getAllCartsFromDB = async () => {
-    return await Cart.find();
+    const carts = await Cart.find().populate("user");
+
+    if (!carts) throw new Error("No carts were found");
+
+    return carts;
 };
 
 const getSingleCartFromDB = async (userId: string) => {
-    const cart = await Cart.findOne({ userId });
+    const cart = await Cart.findOne({ user: userId }).populate("user");
+
     if (!cart) throw new Error("Cart not found");
+
+    return cart;
+};
+
+const getMyCartFromDB = async (authUser: IJwtPayload) => {
+    const cart = await Cart.findOne({ user: authUser?.userId }).populate(
+        "user"
+    );
+
+    if (!cart) throw new Error("Cart not found");
+
     return cart;
 };
 
 const addItemIntoDB = async (
     payload: Omit<
-        TCartItem,
+        ICartItem,
         "totalPrice" | "title" | "image" | "author" | "price"
     >,
     authUser: IJwtPayload
@@ -174,6 +190,7 @@ const clearCartInDB = async (authUser: IJwtPayload) => {
 export const CartServices = {
     getAllCartsFromDB,
     getSingleCartFromDB,
+    getMyCartFromDB,
     addItemIntoDB,
     removeItemFromDB,
     updateItemQuantityInDB,

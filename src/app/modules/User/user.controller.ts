@@ -6,7 +6,10 @@ import { IImageFile } from "../../interface/IImageFile";
 import { IJwtPayload } from "../auth/auth.interface";
 
 const getAllUsers = catchAsync(async (req, res) => {
-    const result = await UserServices.getAllUsersFromDB(req.query);
+    const result = await UserServices.getAllUsersFromDB(
+        req.user as IJwtPayload,
+        req.query
+    );
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,
@@ -18,8 +21,7 @@ const getAllUsers = catchAsync(async (req, res) => {
 });
 
 const getMe = catchAsync(async (req, res) => {
-    const { userId } = req.params;
-    const result = await UserServices.getMeFromDB(userId);
+    const result = await UserServices.getMeFromDB(req.user as IJwtPayload);
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,
@@ -56,9 +58,9 @@ const updateUser = catchAsync(async (req, res) => {
 });
 
 const changeStatus = catchAsync(async (req, res) => {
-    const id = req.params.id;
+    const { userId } = req.params;
 
-    const result = await UserServices.changeStatusIntoDB(id, req.body);
+    const result = await UserServices.changeStatusIntoDB(userId, req.body);
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,

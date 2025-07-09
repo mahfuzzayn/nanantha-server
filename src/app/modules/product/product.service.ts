@@ -2,8 +2,10 @@
 import mongoose from "mongoose";
 import { Product } from "./product.model";
 import QueryBuilder from "../../builder/QueryBuilder";
-import { productsSearchableFields } from "./product.const";
+import { productSearchableFields } from "./product.const";
 import { IProduct } from "./product.interface";
+import AppError from "../../errors/appError";
+import { StatusCodes } from "http-status-codes";
 
 const validateObjectId = (id: string): boolean => {
     return mongoose.Types.ObjectId.isValid(id);
@@ -16,23 +18,70 @@ const createProductIntoDB = async (file: any, payload: IProduct) => {
 
     const result = await Product.create(payload);
 
+    if (!result) {
+        throw new AppError(StatusCodes.NOT_FOUND, "Failed to create product");
+    }
+
     return result;
 };
 
 const getAllProductsFromDB = async (query: Record<string, unknown>) => {
-    const productsQuery = new QueryBuilder(Product.find(), query)
-        .search(productsSearchableFields)
-        .filter()
+    const { rating, minPrice, maxPrice, keywords, inStock } = query;
+
+    const filter: Record<string, any> = {};
+
+    // Adding Status "active" for selecing only active products
+    filter.status = { $eq: "active" };
+
+    if (inStock !== undefined) {
+        filter.inStock = { $eq: inStock === "true" ? true : false };
+    }
+
+    if (rating) {
+        filter.rating = { $gte: parseFloat(rating as string) };
+    }
+
+    const authors = (query?.authors as string)?.split(",") || [];
+
+    if (authors.length) {
+        filter.$or = authors.map((name) => ({
+            author: { $regex: new RegExp(`^${name}`, "i") },
+        }));
+    }
+
+    const category = (query?.category as string)?.split(",") || [];
+
+    if (category.length) {
+        filter.$or = category.map((ctg) => ({
+            category: { $regex: new RegExp(`^${ctg}`, "i") },
+        }));
+    }
+
+    if (keywords) {
+        filter.$or = [
+            { author: { $regex: keywords, $options: "i" } },
+            { title: { $regex: keywords, $options: "i" } },
+            { category: { $regex: keywords, $options: "i" } },
+            { description: { $regex: keywords, $options: "i" } },
+        ];
+    }
+
+    const productsQuery = new QueryBuilder(
+        Product.find(filter).populate("reviews"),
+        query
+    )
+        .search(productSearchableFields)
         .sort()
         .paginate()
-        .fields();
+        .fields()
+        .priceRange(Number(minPrice) || 0, Number(maxPrice) || Infinity);
 
-    const result = await productsQuery.modelQuery;
+    const products = await productsQuery.modelQuery.lean();
     const meta = await productsQuery.countTotal();
 
     return {
         meta,
-        result,
+        result: products,
     };
 };
 
@@ -53,7 +102,13 @@ const getAllAuthorsFromDB = async () => {
                 books: 1,
             },
         },
+        {
+            $sort: {
+                name: 1,
+            },
+        },
     ]);
+
     return result;
 };
 
@@ -64,31 +119,17 @@ const getSingleProductFromDB = async (id: string) => {
         throw error;
     }
 
-    const result = await Product.findById(id);
+    const result = await Product.findOne({
+        _id: id,
+        status: "active",
+    }).populate({
+        path: "reviews",
+        populate: "product user",
+    });
 
     if (!result) {
         const error = new Error(
             "Failed to retrieve the book. The provided ID does not match any existing book"
-        );
-        error.name = "SearchError";
-        throw error;
-    }
-
-    return result;
-};
-
-const getOrderProductFromDB = async (id: string) => {
-    if (!validateObjectId(id)) {
-        const error = new Error("The Product ID is invalid");
-        error.name = "Invalid ProductID";
-        throw error;
-    }
-
-    const result = await Product.findById(id);
-
-    if (!result) {
-        const error = new Error(
-            "Failed to retrieve the product. The provided ID does not match any existing product"
         );
         error.name = "SearchError";
         throw error;
@@ -149,7 +190,14 @@ const deleteProductFromDB = async (id: string) => {
         );
     }
 
-    const result = await Product.deleteOne({ _id: id });
+    const result = await Product.findOneAndUpdate(
+        { _id: id },
+        { status: "discontinued" },
+        {
+            new: true,
+            runValidators: true,
+        }
+    );
     return result;
 };
 
@@ -158,7 +206,6 @@ export const ProductServices = {
     getAllProductsFromDB,
     getAllAuthorsFromDB,
     getSingleProductFromDB,
-    getOrderProductFromDB,
     updateProductFromDB,
     updateProductAfterOrderFromDB,
     deleteProductFromDB,

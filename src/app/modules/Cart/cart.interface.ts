@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
 
-export type TCartItem = {
+export interface ICartItem {
     productId: Types.ObjectId
     title: string
     author: string;
@@ -10,9 +10,9 @@ export type TCartItem = {
     totalPrice: number
 }
 
-export type TCart = {
+export interface ICart  {
     user: Types.ObjectId
-    items: TCartItem[]
+    items: ICartItem[]
     totalItems: number
     totalPrice: number
 }

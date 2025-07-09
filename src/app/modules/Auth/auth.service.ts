@@ -63,6 +63,6 @@ const loginUser = async (payload: IAuth) => {
     }
 };
 
-export const AuthService = {
+export const AuthServices = {
     loginUser,
 };

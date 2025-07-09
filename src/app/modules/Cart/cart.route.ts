@@ -9,11 +9,9 @@ const router = express.Router();
 
 router.get("/", auth(UserRole.ADMIN), cartControllers.getAllCarts);
 
-router.get(
-    "/:userId",
-    auth(UserRole.USER, UserRole.ADMIN),
-    cartControllers.getSingleCart
-);
+router.get("/me", auth(UserRole.USER), cartControllers.getMyCart);
+
+router.get("/:userId", auth(UserRole.ADMIN), cartControllers.getSingleCart);
 
 router.post(
     "/",
@@ -36,10 +34,6 @@ router.put(
     cartControllers.updateItemQuantity
 );
 
-router.delete(
-    "/clear",
-    auth(UserRole.USER),
-    cartControllers.clearCart
-);
+router.delete("/clear", auth(UserRole.USER), cartControllers.clearCart);
 
 export const CartRoutes = router;

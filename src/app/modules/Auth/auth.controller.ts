@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { AuthService } from "./auth.service";
+import { AuthServices } from "./auth.service";
 import sendResponse from "../../utils/sendResponse";
 import catchAsync from "../../utils/catchAsync";
 import { StatusCodes } from "http-status-codes";
 import config from "../../config";
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
-    const result = await AuthService.loginUser(req.body);
+    const result = await AuthServices.loginUser(req.body);
     
     const { refreshToken, accessToken } = result;
 

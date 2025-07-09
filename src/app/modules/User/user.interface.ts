@@ -11,6 +11,8 @@ export interface IUser {
     email: string;
     password: string;
     passwordChangedAt?: Date;
+    reviewsGiven: Types.ObjectId[];
+    location: string;
     profileUrl: string;
     role: UserRole;
     isActive: boolean;
@@ -21,6 +23,7 @@ export interface IUpdateUser {
     password: string;
     oldPassword: string;
     newPassword: string;
+    location: string;
     profileUrl: string;
 }
 
