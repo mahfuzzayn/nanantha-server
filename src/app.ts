@@ -32,7 +32,7 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
 
     res.status(StatusCodes.OK).json({
         success: true,
-        message: "Welcome to Instructly API Server",
+        message: "Welcome to Nanantha API Server",
         version: "1.0.0",
         clientDetails: {
             ipAddress: clientIp,

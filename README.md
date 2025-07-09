@@ -4,7 +4,7 @@
 
 ## **Project Overview**
 
-Nanantha Server is a robust backend built with Node.js, Express, and TypeScript, enabling seamless user management, tutor profiles, bookings, and reviews, with all data securely stored in MongoDB. It features JWT-based authentication, role-based access control, and integrates payment solutions like SSLCommerz or Stripe, ensuring efficient API handling and smooth interaction with the Next.js frontend.
+Nanantha Server is a robust backend built with Node.js, Express, and TypeScript, enabling seamless user management, tutor profiles, bookings, and reviews, with all data securely stored in MongoDB. It features JWT-based authentication, role-based access control, and integrates payment solution Mollie, ensuring efficient API handling and smooth interaction with the Next.js frontend.
 
 ## **Tech Stack**
 
@@ -19,8 +19,8 @@ Nanantha Server is a robust backend built with Node.js, Express, and TypeScript,
 ### **1️⃣ Clone the Repository**
 
 ```sh
-git clone https://github.com/mahfuzzayn/instructly-server.git
-cd instructly-server
+git clone https://github.com/mahfuzzayn/nanantha-server.git
+cd nanantha-server
 ```
 
 ### **2️⃣ Install Dependencies**
@@ -39,6 +39,10 @@ NODE_ENV=development
 
 # Port
 PORT=5000
+
+# URL's
+BASE_URL=http://localhost:5000/api/v1
+CLIENT_URL=http://localhost:3000
 
 # Database URL
 DB_URL=your_mongodb_url
@@ -60,20 +64,8 @@ CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 
-# Email Configuration
-SENDER_EMAIL=your_sender_email
-SENDER_APP_PASS=your_sender_app_pass
-
-# SSLCommerz Payment Info
-STORE_NAME=your_store_name
-PAYMENT_API=your_payment_api
-VALIDATION_API="https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php"
-STORE_ID=your_store_id
-STORE_PASSWORD=your_store_password
-VALIDATION_URL="http://localhost:5000/api/v1/ssl/validate"
-SUCCESS_URL="http://localhost:3000/payment-success"
-FAILED_URL="http://localhost:3000/payment-failed"
-CANCEL_URL="http://localhost:3000/payment-failed"
+# Mollie Payment Info
+MOLLIE_CLIENT_API=your_mollie_client_api
 ```
 
 ### **4️⃣ Run the Development Server**
@@ -87,8 +79,11 @@ Your backend will be running at `http://localhost:5000`.
 ## **API Endpoints**
 
 -   **Auth Routes:** Login & Register user
--   **Subjects Routes:** CRUD operations for subjects
--   **Bookings Routes:** CRUD operations for booking
+-   **User Routes:** CRUD operations for users
+-   **Products Routes:** CRUD operations for products
+-   **Orders Routes:** CRUD operations for orders
 -   **Reviews Routes:** CRUD operations for reviews
+-   **Carts Routes:** CRUD operations for carts
+-   **News Routes:** Read operations for news
 
-Developed by [Mahfuz Zayn](https://mahfuzzayn.netlify.app/).
+Developed by [Mahfuz Zayn](https://mzayn.vercel.app/).
